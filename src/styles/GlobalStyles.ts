@@ -8,13 +8,13 @@ const GlobalStyle = createGlobalStyle`
     font-style: normal;
   }
 
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  body {
+  body,
+  input,
+  textarea,
+  select,
+  table,
+  button,
+  code {
     font-family: 'Pretendard';
     color: ${({ theme }) => theme.colors.textPrimary};
   }

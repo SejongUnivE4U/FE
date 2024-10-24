@@ -10,11 +10,13 @@ import ReportList from './pages/report-list/ReportList';
 import Report from './pages/report/Report';
 import SignUp from './pages/signup/SignUp';
 import GlobalStyle from './styles/GlobalStyles';
+import { ResetStyles } from './styles/ResetStyles';
 import { theme } from './styles/theme';
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
+      <ResetStyles />
       <GlobalStyle />
       <Router>
         <Routes>
