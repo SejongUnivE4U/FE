@@ -26,7 +26,7 @@ export default function Login() {
               onFocus={() => setFocusedField('email')}
               onBlur={() => setFocusedField(null)}
               placeholder="이메일을 입력해 주세요"
-              focused={focusedField === 'email'}
+              $focused={focusedField === 'email'}
             />
           </InputWrapper>
 
@@ -39,7 +39,7 @@ export default function Login() {
               onFocus={() => setFocusedField('password')}
               onBlur={() => setFocusedField(null)}
               placeholder="비밀번호를 입력해 주세요"
-              focused={focusedField === 'password'}
+              $focused={focusedField === 'password'}
             />
           </InputWrapper>
         </InputGroup>
@@ -62,7 +62,6 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0 20px;
   margin-top: 224px;
 `;
 
@@ -79,8 +78,6 @@ const Title = styled.h1`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 400px;
 `;
 
 const InputGroup = styled.div`
@@ -107,7 +104,7 @@ const Label = styled.label`
   color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
-const Input = styled.input<{ focused: boolean }>`
+const Input = styled.input<{ $focused: boolean }>`
   display: flex;
   width: 335px;
   height: 45px;
@@ -118,8 +115,8 @@ const Input = styled.input<{ focused: boolean }>`
   border-radius: 10px;
   background: #f7f7fa;
 
-  border: ${({ focused, theme }) =>
-    focused
+  border: ${({ $focused, theme }) =>
+    $focused
       ? `1px solid ${theme.colors.primaryGreen}`
       : '1px solid transparent'};
 
@@ -138,7 +135,7 @@ const SignUpText = styled.span`
   font-size: 14px;
   color: ${({ theme }) => theme.colors.primaryGreen};
   cursor: pointer;
-  &:hover {
+  &:active {
     text-decoration: underline;
   }
 `;
