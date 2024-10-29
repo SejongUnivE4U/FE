@@ -30,31 +30,37 @@ export default function NavBar() {
         홈
       </NavItem>
       <NavItem
-        onClick={() => handleNavigation('/check')}
-        isActive={location.pathname === '/check'}
+        onClick={() => handleNavigation('/oral-check')}
+        isActive={location.pathname === '/oral-check'}
       >
         <NavIcon
-          src={location.pathname === '/check' ? CheckActiveIcon : CheckIcon}
+          src={
+            location.pathname === '/oral-check' ? CheckActiveIcon : CheckIcon
+          }
           alt="구강 체크 아이콘"
         />
         구강 체크
       </NavItem>
       <NavItem
-        onClick={() => handleNavigation('/report')}
-        isActive={location.pathname === '/report'}
+        onClick={() => handleNavigation('/report-list')}
+        isActive={location.pathname === '/report-list'}
       >
         <NavIcon
-          src={location.pathname === '/report' ? ReportActiveIcon : ReportIcon}
+          src={
+            location.pathname === '/report-list' ? ReportActiveIcon : ReportIcon
+          }
           alt="구강 리포트 아이콘"
         />
         구강 리포트
       </NavItem>
       <NavItem
-        onClick={() => handleNavigation('/settings')}
-        isActive={location.pathname === '/settings'}
+        onClick={() => handleNavigation('/account-setting')}
+        isActive={location.pathname === '/account-setting'}
       >
         <NavIcon
-          src={location.pathname === '/settings' ? UserActiveIcon : UserIcon}
+          src={
+            location.pathname === '/account-setting' ? UserActiveIcon : UserIcon
+          }
           alt="계정 설정 아이콘"
         />
         계정 설정
