@@ -21,7 +21,7 @@ export default function NavBar() {
     <NavBarContainer>
       <NavItem
         onClick={() => handleNavigation('/home')}
-        isActive={location.pathname === '/home'}
+        $isActive={location.pathname === '/home'}
       >
         <NavIcon
           src={location.pathname === '/home' ? HomeActiveIcon : HomeIcon}
@@ -31,7 +31,7 @@ export default function NavBar() {
       </NavItem>
       <NavItem
         onClick={() => handleNavigation('/oral-check')}
-        isActive={location.pathname === '/oral-check'}
+        $isActive={location.pathname === '/oral-check'}
       >
         <NavIcon
           src={
@@ -43,7 +43,7 @@ export default function NavBar() {
       </NavItem>
       <NavItem
         onClick={() => handleNavigation('/report-list')}
-        isActive={location.pathname === '/report-list'}
+        $isActive={location.pathname === '/report-list'}
       >
         <NavIcon
           src={
@@ -55,7 +55,7 @@ export default function NavBar() {
       </NavItem>
       <NavItem
         onClick={() => handleNavigation('/account-setting')}
-        isActive={location.pathname === '/account-setting'}
+        $isActive={location.pathname === '/account-setting'}
       >
         <NavIcon
           src={
@@ -83,7 +83,7 @@ const NavBarContainer = styled.nav`
   border-top: solid #b3b3b3;
 `;
 
-const NavItem = styled.div<{ isActive: boolean }>`
+const NavItem = styled.div<{ $isActive: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -92,8 +92,8 @@ const NavItem = styled.div<{ isActive: boolean }>`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  color: ${({ isActive, theme }) =>
-    isActive ? theme.colors.primaryGreen : '#b3b3b3'};
+  color: ${({ $isActive, theme }) =>
+    $isActive ? theme.colors.primaryGreen : '#b3b3b3'};
   cursor: pointer;
 `;
 
