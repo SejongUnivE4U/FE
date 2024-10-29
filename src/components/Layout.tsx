@@ -9,7 +9,6 @@ export default function Layout() {
     '/account-setting',
     '/oral-check',
     '/report-list',
-    '/report',
   ];
 
   return (
