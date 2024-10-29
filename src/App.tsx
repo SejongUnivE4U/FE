@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import './App.css';
 import AccountSetting from './pages/account-setting/AccountSetting';
 import Home from './pages/home/Home';
 import Landing from './pages/landing/Landing';
