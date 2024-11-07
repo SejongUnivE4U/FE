@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CameraIcon from '../../../../public/assets/icons/camera-icon.svg';
@@ -6,6 +7,22 @@ import BackButton from '../../../components/BackButton';
 
 export default function OralCheckPhoto() {
   const navigate = useNavigate();
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.result) {
+          setSelectedImage(reader.result as string);
+          navigate('/oral-check/photo-preview', {
+            state: { image: reader.result },
+          });
+        }
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  };
 
   return (
     <Container>
@@ -22,9 +39,17 @@ export default function OralCheckPhoto() {
             <OptionLabel>사진 촬영</OptionLabel>
           </Option>
           <Option>
-            <CircleWrapper>
-              <OptionIcon src={GalleryIcon} alt="사진 업로드 아이콘" />
-            </CircleWrapper>
+            <label htmlFor="file-upload" style={{ cursor: 'pointer' }}>
+              <CircleWrapper>
+                <OptionIcon src={GalleryIcon} alt="사진 업로드 아이콘" />
+                <HiddenFileInput
+                  id="file-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                />
+              </CircleWrapper>
+            </label>
             <OptionLabel>사진 업로드</OptionLabel>
           </Option>
         </OptionsContainer>
@@ -93,4 +118,8 @@ const OptionLabel = styled.p`
   font-size: 14px;
   color: ${({ theme }) => theme.colors.textPrimary};
   margin-top: 16px;
+`;
+
+const HiddenFileInput = styled.input`
+  display: none;
 `;
