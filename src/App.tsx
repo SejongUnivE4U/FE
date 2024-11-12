@@ -6,6 +6,7 @@ import Home from './pages/home/Home';
 import Landing from './pages/landing/Landing';
 import Login from './pages/login/Login';
 import OralCheck from './pages/oral-check/OralCheck';
+import AdditionalCheck from './pages/oral-check/aditional-check/AditionalCheck';
 import PhotoPreview from './pages/oral-check/photo-preview/PhotoPreview';
 import OralCheckPhoto from './pages/oral-check/photo/OralCheckPhoto';
 import OralCheckType from './pages/oral-check/type/OralCheckType';
@@ -39,6 +40,10 @@ function App() {
             <Route
               path="/oral-check/photo-preview"
               element={<PhotoPreview />}
+            />
+            <Route
+              path="/oral-check/aditional-check"
+              element={<AdditionalCheck />}
             />
 
             <Route path="/report" element={<Report />} />

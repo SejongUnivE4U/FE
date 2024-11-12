@@ -68,7 +68,7 @@ export default function PhotoPreview() {
             <ButtonContainer>
               <Button
                 variant="primary"
-                onClick={() => alert('다음 단계 클릭')}
+                onClick={() => navigate('/oral-check/photo')}
                 disabled={!isPhotoValid}
               >
                 다음 단계
