@@ -1,21 +1,46 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 import styled from 'styled-components';
+import instance from '../../api/axios';
 import Button from '../../components/Button';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const isFormValid = email.trim() !== '' && password.trim() !== '';
 
   const navigate = useNavigate();
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const response = await instance.post('/login', { email, password });
+      Cookies.set('refreshToken', response.data.refreshToken);
+
+      alert('로그인 성공');
+      navigate('/home');
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        setErrorMessage(
+          error.response.data.message || '로그인에 실패했습니다.',
+        );
+      } else {
+        setErrorMessage('네트워크 오류가 발생했습니다. 다시 시도해 주세요.');
+      }
+    }
+  };
+
   return (
     <Container>
       <Title>로그인</Title>
 
-      <Form>
+      <Form onSubmit={handleLogin}>
         <InputGroup>
           <InputWrapper>
             <Label>이메일</Label>
@@ -44,11 +69,7 @@ export default function Login() {
           </InputWrapper>
         </InputGroup>
 
-        <Button
-          variant="primary"
-          onClick={() => alert('로그인 클릭')}
-          disabled={!isFormValid}
-        >
+        <Button variant="primary" type="submit" disabled={!isFormValid}>
           로그인
         </Button>
       </Form>
