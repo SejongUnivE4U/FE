@@ -1,16 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import ArrowIcon from '../../../../public/assets/icons/arrow-icon.svg';
 import GreenArrowIcon from '../../../../public/assets/icons/green-arrow-icon.svg';
+import BackButton from '../../../components/BackButton';
 
 export default function OralCheckType() {
   const navigate = useNavigate();
 
   return (
     <Container>
-      <BackButton onClick={() => navigate('/oral-check')}>
-        <Icon src={ArrowIcon} alt="뒤로 가기" />
-      </BackButton>
+      <BackButton to="/oral-check" />
       <Content>
         <CheckOption onClick={() => alert('정밀 검사로 이동')}>
           <TextContent>
@@ -23,7 +21,7 @@ export default function OralCheckType() {
           <Arrow src={GreenArrowIcon} alt="검사 아이콘" />
         </CheckOption>
 
-        <CheckOption onClick={() => alert('빠른 검사로 이동')}>
+        <CheckOption onClick={() => navigate('/oral-check/photo')}>
           <TextContent>
             <Title>빠른 검사</Title>
             <Description>
@@ -44,21 +42,6 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const BackButton = styled.button`
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  position: absolute;
-  top: 20px;
-  left: 20px;
-`;
-
-const Icon = styled.img`
-  width: 24px;
-  height: 24px;
 `;
 
 const Content = styled.div`
