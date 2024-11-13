@@ -1,9 +1,15 @@
+import Carousel from '../../components/Carousel';
 import ReportCard from './ReportCard';
 
 export default function ReportList() {
   return (
     <>
       보고서 리스트 페이지
+      <Carousel>
+        <div>Content 1</div>
+        <div>Content 2</div>
+        <div>Content 3</div>
+      </Carousel>
       <ReportCard
         diagnosisId={1}
         images={{
