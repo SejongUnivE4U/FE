@@ -1,12 +1,59 @@
+import styled from 'styled-components';
 import Carousel from '../../components/Carousel';
+import Graph from './Graph';
 import ReportCard from './ReportCard';
 
 export default function ReportList() {
+  const data = [
+    {
+      diagnosisId: 1,
+      reportScore: 30,
+    },
+    {
+      diagnosisId: 2,
+      reportScore: 20,
+    },
+    {
+      diagnosisId: 3,
+      reportScore: 60,
+    },
+    {
+      diagnosisId: 4,
+      reportScore: 20,
+    },
+    {
+      diagnosisId: 5,
+      reportScore: 50,
+    },
+    {
+      diagnosisId: 6,
+      reportScore: 90,
+    },
+    {
+      diagnosisId: 7,
+      reportScore: 30,
+    },
+    {
+      diagnosisId: 8,
+      reportScore: 20,
+    },
+    {
+      diagnosisId: 9,
+      reportScore: 60,
+    },
+    {
+      diagnosisId: 10,
+      reportScore: 20,
+    },
+  ];
+
   return (
     <>
       보고서 리스트 페이지
       <Carousel>
-        <div>Content 1</div>
+        <div>
+          <Graph data={data} />
+        </div>
         <div>Content 2</div>
         <div>Content 3</div>
       </Carousel>
@@ -53,3 +100,13 @@ export default function ReportList() {
     </>
   );
 }
+
+const CarouselTitle = styled.p`
+  color: #474d66;
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+`;
