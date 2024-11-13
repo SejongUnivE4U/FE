@@ -79,7 +79,9 @@ export default function SignUp() {
     }
   };
 
-  const handleSignUp = async () => {
+  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     const currentYear = new Date().getFullYear();
     const age = birthYear ? currentYear - Number(birthYear) : 0;
 
@@ -102,7 +104,7 @@ export default function SignUp() {
     <Container>
       <Title>회원가입</Title>
 
-      <Form>
+      <Form onSubmit={handleSignUp}>
         <InputGroup>
           <InputWrapper>
             <Label>이름</Label>
@@ -176,7 +178,7 @@ export default function SignUp() {
             <Label>성별</Label>
             <GenderGroup>
               <GenderButton
-                selected={gender === '남자'}
+                selected={gender === 'male'}
                 onClick={(e) => {
                   e.preventDefault();
                   setGender('male');
@@ -185,7 +187,7 @@ export default function SignUp() {
                 남자
               </GenderButton>
               <GenderButton
-                selected={gender === '여자'}
+                selected={gender === 'female'}
                 onClick={(e) => {
                   e.preventDefault();
                   setGender('female');
@@ -207,11 +209,7 @@ export default function SignUp() {
           </InputWrapper>
         </InputGroup>
 
-        <Button
-          variant="primary"
-          onClick={() => alert('회원가입 클릭')}
-          disabled={!isFormValid}
-        >
+        <Button variant="primary" disabled={!isFormValid}>
           회원가입
         </Button>
       </Form>
