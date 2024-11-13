@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import instance from '../../api/axios';
 import Button from '../../components/Button';
 import Dropdown from '../../components/dropdown';
 
@@ -17,13 +18,14 @@ export default function SignUp() {
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [checkingEmail, setCheckingEmail] = useState(false);
 
   const years = Array.from({ length: 100 }, (_, i) => String(2024 - i));
 
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const isFormValid =
     name &&
-    // emailVerified &&
+    emailVerified &&
     password &&
     confirmPassword &&
     gender &&
@@ -52,13 +54,57 @@ export default function SignUp() {
     } else {
       setEmailError(null);
     }
+    setEmailVerified(false);
+  };
+
+  const checkEmailDuplication = async () => {
+    if (!isEmailValid) {
+      setEmailError('올바른 이메일을 입력해 주세요.');
+      return;
+    }
+    try {
+      setCheckingEmail(true);
+      const response = await instance.get(`/check-email?email=${email}`);
+      if (response.data === false) {
+        setEmailError('이미 사용 중인 이메일입니다.');
+        setEmailVerified(false);
+      } else {
+        setEmailError(null);
+        setEmailVerified(true);
+      }
+    } catch (error) {
+      setEmailError('이메일 중복 확인 중 오류가 발생했습니다.');
+    } finally {
+      setCheckingEmail(false);
+    }
+  };
+
+  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const currentYear = new Date().getFullYear();
+    const age = birthYear ? currentYear - Number(birthYear) : 0;
+
+    try {
+      const response = await instance.post('/register', {
+        email,
+        password,
+        name,
+        age,
+        gender,
+      });
+      alert('회원가입이 완료되었습니다.');
+      navigate('/login');
+    } catch (error) {
+      alert('회원가입 중 오류가 발생했습니다.');
+    }
   };
 
   return (
     <Container>
       <Title>회원가입</Title>
 
-      <Form>
+      <Form onSubmit={handleSignUp}>
         <InputGroup>
           <InputWrapper>
             <Label>이름</Label>
@@ -88,13 +134,17 @@ export default function SignUp() {
               <EmailVerifyButton
                 onClick={(e) => {
                   e.preventDefault();
+                  checkEmailDuplication();
                 }}
-                disabled={!isEmailValid || emailVerified}
+                disabled={!isEmailValid || emailVerified || checkingEmail}
               >
-                중복 확인
+                {checkingEmail ? '확인 중...' : '중복 확인'}
               </EmailVerifyButton>
             </EmailInputContainer>
             {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
+            {!emailError && emailVerified && (
+              <VerifyMessage>사용 가능한 이메일입니다.</VerifyMessage>
+            )}
           </InputWrapper>
 
           <InputWrapper>
@@ -128,19 +178,19 @@ export default function SignUp() {
             <Label>성별</Label>
             <GenderGroup>
               <GenderButton
-                selected={gender === '남자'}
+                selected={gender === 'male'}
                 onClick={(e) => {
                   e.preventDefault();
-                  setGender('남자');
+                  setGender('male');
                 }}
               >
                 남자
               </GenderButton>
               <GenderButton
-                selected={gender === '여자'}
+                selected={gender === 'female'}
                 onClick={(e) => {
                   e.preventDefault();
-                  setGender('여자');
+                  setGender('female');
                 }}
               >
                 여자
@@ -159,11 +209,7 @@ export default function SignUp() {
           </InputWrapper>
         </InputGroup>
 
-        <Button
-          variant="primary"
-          onClick={() => alert('회원가입 클릭')}
-          disabled={!isFormValid}
-        >
+        <Button variant="primary" disabled={!isFormValid}>
           회원가입
         </Button>
       </Form>
@@ -302,6 +348,15 @@ const EmailVerifyButton = styled.button`
 
 const ErrorMessage = styled.span`
   color: #d14343;
+  font-family: Pretendard;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+`;
+
+const VerifyMessage = styled.span`
+  color: ${({ theme }) => theme.colors.primaryGreen};
   font-family: Pretendard;
   font-size: 12px;
   font-style: normal;

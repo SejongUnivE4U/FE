@@ -3,9 +3,10 @@ import styled, { css } from 'styled-components';
 
 type ButtonProps = {
   children: React.ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
   variant?: 'primary' | 'secondary' | 'outline';
   disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
 };
 
 const Button: React.FC<ButtonProps> = ({
@@ -13,6 +14,7 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   variant = 'primary',
   disabled = false,
+  type = 'button',
 }) => {
   return (
     <StyledButton onClick={onClick} variant={variant} disabled={disabled}>
