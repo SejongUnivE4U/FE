@@ -20,10 +20,7 @@ const Graph: React.FC<GraphProps> = ({ data }) => {
       <GraphContainer>
         {displayedData.map((item) => (
           <BarContainer key={item.diagnosisId}>
-            <Bar
-              height={(item.reportScore / maxScore) * 100}
-              isCritical={item.reportScore <= 40}
-            />
+            <Bar height={(item.reportScore / maxScore) * 100} />
           </BarContainer>
         ))}
       </GraphContainer>
@@ -56,10 +53,10 @@ const GraphContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  justify-content: flex-start; /* 아이템이 붙어 있게 정렬 */
+  justify-content: flex-start;
   gap: 7px;
-  width: auto; /* 필요시 너비 자동 조정 */
-  max-width: 290px; /* 최대 너비 제한 */
+  width: auto;
+  max-width: 290px;
 `;
 
 const BarContainer = styled.div`
@@ -72,7 +69,7 @@ const BarContainer = styled.div`
   align-items: flex-end;
 `;
 
-const Bar = styled.div<{ height: number; isCritical: boolean }>`
+const Bar = styled.div<{ height: number }>`
   width: 100%;
   background: linear-gradient(#c2ea80 0%, #4cbfa4 100%);
   height: ${({ height }) => height}%;

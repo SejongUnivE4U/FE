@@ -29,7 +29,7 @@ const Carousel: React.FC<CarouselProps> = ({ children }) => {
 
   return (
     <CarouselContainer {...handlers}>
-      <SlideWrapper currentIndex={currentIndex}>
+      <SlideWrapper $currentIndex={currentIndex}>
         {children.map((child, index) => (
           <Slide key={index}>{child}</Slide>
         ))}
@@ -38,7 +38,7 @@ const Carousel: React.FC<CarouselProps> = ({ children }) => {
         {children.map((_, index) => (
           <Dot
             key={index}
-            isActive={index === currentIndex}
+            $isActive={index === currentIndex}
             onClick={() => setCurrentIndex(index)}
           />
         ))}
@@ -57,10 +57,11 @@ const CarouselContainer = styled.div`
   touch-action: pan-y;
 `;
 
-const SlideWrapper = styled.div<{ currentIndex: number }>`
+const SlideWrapper = styled.div<{ $currentIndex: number }>`
   display: flex;
   transition: transform 0.3s ease-in-out;
-  transform: ${({ currentIndex }) => `translateX(-${currentIndex * 100}%)`};
+  transform: ${({ $currentIndex: currentIndex }) =>
+    `translateX(-${currentIndex * 100}%)`};
 `;
 
 const Slide = styled.div`
@@ -78,12 +79,13 @@ const DotsContainer = styled.div`
   margin-top: 10px;
 `;
 
-const Dot = styled.div<{ isActive: boolean }>`
+const Dot = styled.div<{ $isActive: boolean }>`
   width: 6px;
   height: 6px;
   margin: 0 2.5px;
   border-radius: 50%;
-  background-color: ${({ isActive }) => (isActive ? '#333' : '#ccc')};
+  background-color: ${({ $isActive: $isActive }) =>
+    $isActive ? '#333' : '#ccc'};
   cursor: pointer;
   transition: background-color 0.3s;
 `;
