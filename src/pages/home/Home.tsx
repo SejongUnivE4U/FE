@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import LogoImage from '../../../public/assets/icons/logo.svg';
 import TitiImage from '../../../public/assets/images/character.png';
+import Carousel from '../../components/Carousel';
 import ScoreDonut from '../../components/ScoreDonut';
 
 type StateType = 'initial' | 'overdue' | 'needsAttention' | 'healthy';
@@ -46,21 +47,26 @@ export default function Home() {
           </ActionButton>
         </CharacterSection>
 
-        <StatusSection>
-          <ScoreContainer>
-            <ScoreDonut score={score} />
-          </ScoreContainer>
-          <StatusTextContainer>
-            <StatusBox>
-              <StatusBoxLabel>최근 검사 결과</StatusBoxLabel>
-              <StatusRisk>{statusRisk}</StatusRisk>
-            </StatusBox>
-            <StatusBox>
-              <StatusBoxLabel>총 검사 횟수</StatusBoxLabel>
-              <TotalChecksCount>{totalChecks}회</TotalChecksCount>
-            </StatusBox>
-          </StatusTextContainer>
-        </StatusSection>
+        <Carousel>
+          <div>
+            <StatusSection>
+              <ScoreContainer>
+                <ScoreDonut score={score} />
+              </ScoreContainer>
+              <StatusTextContainer>
+                <StatusBox>
+                  <StatusBoxLabel>최근 검사 결과</StatusBoxLabel>
+                  <StatusRisk>{statusRisk}</StatusRisk>
+                </StatusBox>
+                <StatusBox>
+                  <StatusBoxLabel>총 검사 횟수</StatusBoxLabel>
+                  <TotalChecksCount>{totalChecks}회</TotalChecksCount>
+                </StatusBox>
+              </StatusTextContainer>
+            </StatusSection>
+          </div>
+          <div>Content 2</div>
+        </Carousel>
       </ContentsContainer>
     </Container>
   );
@@ -118,6 +124,7 @@ const CharacterSection = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  margin-bottom: 18px;
 `;
 
 const CharacterImage = styled.img`
@@ -160,12 +167,6 @@ const StatusSection = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
-  height: 192px;
-  background: #f7f7fa;
-  border-radius: 15px;
-  padding: 20px;
-  margin-top: 18px;
 `;
 
 const ScoreContainer = styled.div`
@@ -180,6 +181,7 @@ const StatusTextContainer = styled.div`
   flex-direction: column;
   gap: 15px;
   flex: 1;
+  margin-left: 20px;
 `;
 
 const StatusBox = styled.div`

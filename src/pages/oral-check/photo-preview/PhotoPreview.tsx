@@ -54,7 +54,7 @@ export default function PhotoPreview() {
             <ImagePreview src={image} alt="Uploaded Preview" />
             <NoticeWrapper>
               <NoticeIcon src={isPhotoValid ? CheckCircleIcon : XCircleIcon} />
-              <Notice isValid={isPhotoValid || false}>
+              <Notice $isValid={isPhotoValid || false}>
                 {isPhotoValid
                   ? '검사가 가능한 사진입니다.'
                   : '구강을 인식할 수 없습니다. 다시 촬영해 주세요.'}
@@ -125,14 +125,14 @@ const NoticeWrapper = styled.div`
   align-items: center;
 `;
 
-const Notice = styled.p<{ isValid?: boolean }>`
+const Notice = styled.p<{ $isValid?: boolean }>`
   color: ${({ theme }) => theme.colors.primaryGreen};
   font-family: Pretendard;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  color: ${({ isValid, theme }) =>
+  color: ${({ $isValid: isValid, theme }) =>
     isValid ? '${theme.colors.primaryGreen}' : '#FF5E5E'};
 `;
 
