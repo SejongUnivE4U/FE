@@ -10,7 +10,7 @@ export default function OralCheckType() {
     <Container>
       <BackButton to="/oral-check" />
       <Content>
-        <CheckOption onClick={() => alert('정밀 검사로 이동')}>
+        <CheckOption onClick={() => navigate('/detail-oral-check')}>
           <TextContent>
             <Title>정밀 검사</Title>
             <Description>

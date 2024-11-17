@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import Layout from './components/Layout';
 import AccountSetting from './pages/account-setting/AccountSetting';
+import DetailOralCheck from './pages/detail-oral-check/DetailOralCheck';
 import Home from './pages/home/Home';
 import Landing from './pages/landing/Landing';
 import Login from './pages/login/Login';
@@ -50,6 +51,7 @@ function App() {
               path="/oral-check/aditional-check"
               element={<AdditionalCheck />}
             />
+            <Route path="/detail-oral-check" element={<DetailOralCheck />} />
 
             <Route path="/report" element={<Report />} />
             <Route path="/report-list" element={<ReportList />} />
