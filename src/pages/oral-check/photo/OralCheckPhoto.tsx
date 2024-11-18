@@ -25,7 +25,9 @@ export default function OralCheckPhoto() {
   };
 
   const handleCameraCapture = () => {
-    navigate('/oral-check/camera-capture');
+    navigate('/oral-check/camera-capture', {
+      state: { from: '/oral-check/photo' },
+    });
   };
 
   return (

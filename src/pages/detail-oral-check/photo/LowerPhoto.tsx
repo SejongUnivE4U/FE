@@ -36,7 +36,9 @@ export default function LowerPhoto() {
   };
 
   const handleCameraCapture = () => {
-    navigate('/oral-check/camera-capture');
+    navigate('/oral-check/camera-capture', {
+      state: { from: '/detail-oral-check/lower-photo' },
+    });
   };
 
   return (

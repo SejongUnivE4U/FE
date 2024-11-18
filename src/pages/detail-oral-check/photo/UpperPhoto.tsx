@@ -36,7 +36,9 @@ export default function UpperPhoto() {
   };
 
   const handleCameraCapture = () => {
-    navigate('/oral-check/camera-capture');
+    navigate('/oral-check/camera-capture', {
+      state: { from: '/detail-oral-check/upper-photo' },
+    });
   };
 
   return (

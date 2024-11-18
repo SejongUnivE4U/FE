@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import LipGuideImage from '../../../../public/assets/icons/lip-guide.svg';
 
@@ -9,6 +9,7 @@ const CameraCapture: React.FC = () => {
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [isFacingUser, setIsFacingUser] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     startCamera();
@@ -41,9 +42,34 @@ const CameraCapture: React.FC = () => {
           canvasRef.current.height,
         );
         const imageDataUrl = canvasRef.current.toDataURL('image/png');
-        navigate('/oral-check/photo-preview', {
-          state: { image: imageDataUrl },
-        });
+        console.log(location.state);
+        if (location.state && location.state.from === '/oral-check/photo') {
+          navigate('/oral-check/photo-preview', {
+            state: { image: imageDataUrl },
+          });
+        } else if (
+          location.state &&
+          location.state.from === '/detail-oral-check/front-photo'
+        ) {
+          navigate('/detail-oral-check/front-preview', {
+            state: { image: imageDataUrl },
+          });
+        } else if (
+          location.state &&
+          location.state.from === '/detail-oral-check/upper-photo'
+        ) {
+          navigate('/detail-oral-check/upper-preview', {
+            state: { image: imageDataUrl },
+          });
+        } else if (
+          location.state &&
+          location.state.from === '/detail-oral-check/lower-photo'
+        ) {
+          navigate('/detail-oral-check/lower-preview', {
+            state: { image: imageDataUrl },
+          });
+        }
+
         stopCamera();
       }
     }

@@ -36,7 +36,9 @@ export default function FrontPhoto() {
   };
 
   const handleCameraCapture = () => {
-    navigate('/oral-check/camera-capture');
+    navigate('/oral-check/camera-capture', {
+      state: { from: '/detail-oral-check/front-photo' },
+    });
   };
 
   return (
