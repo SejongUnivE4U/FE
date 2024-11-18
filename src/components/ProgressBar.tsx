@@ -13,8 +13,8 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ steps, currentStep }) => {
       {steps.map((step, index) => (
         <StepContainer key={index}>
           <StepCircle
-            isCompleted={index < currentStep}
-            isActive={index === currentStep}
+            $isCompleted={index < currentStep}
+            $isActive={index === currentStep}
           >
             {index < currentStep ? <Check src={CheckIcon} alt="완료" /> : null}
           </StepCircle>
@@ -25,8 +25,8 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ steps, currentStep }) => {
           )}
           {index < steps.length - 1 && (
             <StepLine
-              isCompleted={index < currentStep}
-              stepsLength={steps.length}
+              $isCompleted={index < currentStep}
+              $stepsLength={steps.length}
             />
           )}
         </StepContainer>
@@ -47,17 +47,20 @@ const StepContainer = styled.div`
   position: relative;
 `;
 
-const StepCircle = styled.div<{ isCompleted: boolean; isActive: boolean }>`
+const StepCircle = styled.div<{ $isCompleted: boolean; $isActive: boolean }>`
   width: 27px;
   height: 27px;
   border-radius: 50%;
-  background-color: ${({ isCompleted, isActive, theme }) =>
-    isCompleted || isActive ? theme.colors.primaryGreen : '#D3D3D3'};
+  background-color: ${({
+    $isCompleted: isCompleted,
+    $isActive: isActive,
+    theme,
+  }) => (isCompleted || isActive ? theme.colors.primaryGreen : '#D3D3D3')};
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  ${({ isActive, theme }) =>
+  ${({ $isActive: isActive, theme }) =>
     isActive &&
     `
     border: 2px solid ${theme.colors.primaryGreen};
@@ -75,8 +78,8 @@ const SpeechBubble = styled.div`
   align-items: center;
   justify-content: center;
   position: absolute;
-  top: -40px;
-  left: 30%;
+  top: -30px;
+  left: 11%;
   transform: translateX(-50%);
   background-color: #e0f7e0;
   padding: 4px 8px;
@@ -107,11 +110,11 @@ const BubbleText = styled.p`
   white-space: nowrap;
 `;
 
-const StepLine = styled.div<{ isCompleted: boolean; stepsLength: number }>`
-  width: ${({ stepsLength }) =>
+const StepLine = styled.div<{ $isCompleted: boolean; $stepsLength: number }>`
+  width: ${({ $stepsLength: stepsLength }) =>
     `calc((327px - 27px * ${stepsLength}) / (${stepsLength} - 1))`};
   height: 4px;
-  background-color: ${({ isCompleted, theme }) =>
+  background-color: ${({ $isCompleted: isCompleted, theme }) =>
     isCompleted ? theme.colors.primaryGreen : '#D3D3D3'};
   margin: 0;
   flex-shrink: 0;

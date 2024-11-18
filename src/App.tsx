@@ -3,6 +3,12 @@ import { ThemeProvider } from 'styled-components';
 import Layout from './components/Layout';
 import AccountSetting from './pages/account-setting/AccountSetting';
 import DetailOralCheck from './pages/detail-oral-check/DetailOralCheck';
+import FrontPhotoPreview from './pages/detail-oral-check/photo-preview/FrontPhotoPreview';
+import LowerPhotoPreview from './pages/detail-oral-check/photo-preview/LowerPhotoPreview';
+import UpperPhotoPreview from './pages/detail-oral-check/photo-preview/UpperPhotoPreview';
+import FrontPhoto from './pages/detail-oral-check/photo/FrontPhoto';
+import LowerPhoto from './pages/detail-oral-check/photo/LowerPhoto';
+import UpperPhoto from './pages/detail-oral-check/photo/UpperPhoto';
 import Home from './pages/home/Home';
 import Landing from './pages/landing/Landing';
 import Login from './pages/login/Login';
@@ -51,7 +57,32 @@ function App() {
               path="/oral-check/aditional-check"
               element={<AdditionalCheck />}
             />
+
             <Route path="/detail-oral-check" element={<DetailOralCheck />} />
+            <Route
+              path="/detail-oral-check/front-photo"
+              element={<FrontPhoto />}
+            />
+            <Route
+              path="/detail-oral-check/upper-photo"
+              element={<UpperPhoto />}
+            />
+            <Route
+              path="/detail-oral-check/lower-photo"
+              element={<LowerPhoto />}
+            />
+            <Route
+              path="/detail-oral-check/front-preview"
+              element={<FrontPhotoPreview />}
+            />
+            <Route
+              path="/detail-oral-check/upper-preview"
+              element={<UpperPhotoPreview />}
+            />
+            <Route
+              path="/detail-oral-check/lower-preview"
+              element={<LowerPhotoPreview />}
+            />
 
             <Route path="/report" element={<Report />} />
             <Route path="/report-list" element={<ReportList />} />

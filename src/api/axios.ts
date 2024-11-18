@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  withCredentials: true, // 쿠키 기반 인증을 위해 추가
+  withCredentials: true,
 });
 
 const onError = (status: number, message: string) => {

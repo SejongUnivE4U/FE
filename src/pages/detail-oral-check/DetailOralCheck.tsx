@@ -1,70 +1,41 @@
-import styled from 'styled-components';
+import { useState } from 'react';
 import ProgressBar from '../../components/ProgressBar';
+import PhotoCaptureOrUpload from './PhotoCaptureOrUpload';
 
-export default function DetailOralCheck() {
+const DetailOralCheck = () => {
+  // 부위 목록
+  const steps = ['입술', '혀', '입천장'];
+  const [currentStep, setCurrentStep] = useState(0);
+
+  // 다음 단계로 진행하는 함수
+  const goToNextStep = () => {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
+    } else {
+      // 모든 단계 완료 처리 로직 (예: 최종 진단 페이지로 이동)
+    }
+  };
+
+  // 이전 단계로 돌아가는 함수
+  const goToPreviousStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
   return (
     <div>
-      <Div>
-        <ProgressBar
-          steps={[
-            '입술',
-            '혀',
-            '입천장',
-            '오른쪽 상악',
-            '왼쪽 상악',
-            '오른쪽 하악',
-            '왼쪽하악',
-          ]}
-          currentStep={0} // 현재 진행중인 스텝의 인덱스
-        />
-      </Div>
-      <Div>
-        <ProgressBar
-          steps={[
-            '입술',
-            '혀',
-            '입천장',
-            '오른쪽 상악',
-            '왼쪽 상악',
-            '오른쪽 하악',
-            '왼쪽하악',
-          ]}
-          currentStep={1} // 현재 진행중인 스텝의 인덱스
-        />
-      </Div>
-      <Div>
-        <ProgressBar
-          steps={[
-            '입술',
-            '혀',
-            '입천장',
-            '오른쪽 상악',
-            '왼쪽 상악',
-            '오른쪽 하악',
-            '왼쪽하악',
-          ]}
-          currentStep={2} // 현재 진행중인 스텝의 인덱스
-        />
-      </Div>
-      <Div>
-        <ProgressBar
-          steps={[
-            '입술',
-            '혀',
-            '입천장',
-            '오른쪽 상악',
-            '왼쪽 상악',
-            '오른쪽 하악',
-            '왼쪽하악',
-          ]}
-          currentStep={3} // 현재 진행중인 스텝의 인덱스
-        />
-      </Div>
+      {/* 프로세스 바 컴포넌트 */}
+      <ProgressBar steps={steps} currentStep={currentStep} />
+
+      {/* 현재 부위의 검사 화면 */}
+      <PhotoCaptureOrUpload
+        currentStep={steps[currentStep]}
+        onNext={goToNextStep}
+        onPrevious={goToPreviousStep}
+      />
     </div>
   );
-}
+};
 
-const Div = styled.div`
-  margin-left: 50px;
-  margin-top: 100px;
-`;
+export default DetailOralCheck;
