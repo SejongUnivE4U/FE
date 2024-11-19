@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import BackButton from '../../../components/BackButton';
 import Button from '../../../components/Button';
 import ProgressBar from '../../../components/ProgressBar';
@@ -19,6 +18,7 @@ export default function UpperPhoto() {
   const currentStep = 1;
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  console.log(selectedImage); //나중에 다시보기
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {

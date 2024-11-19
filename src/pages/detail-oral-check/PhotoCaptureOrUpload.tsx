@@ -38,6 +38,7 @@ const PhotoCaptureOrUpload: React.FC<PhotoCaptureOrUploadProps> = ({
   };
 
   const validatePhoto = (image: string) => {
+    console.log(image); //임시
     // 임시 검증 로직 (여기서 API 호출 또는 로직 수행 가능)
     setTimeout(() => {
       const isValid = Math.random() > 0.5; // 임의로 통과 여부 결정 (실제 로직으로 변경)

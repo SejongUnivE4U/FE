@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import ToothSelectImage from '../../../../public/assets/images/tooth-select-img.png';
 
@@ -136,7 +136,7 @@ const ToothButton = styled.button<{ $isSelected: boolean }>`
   border: 1px solid
     ${({ $isSelected: isSelected, theme }) =>
       isSelected ? theme.colors.primaryGreen : '#8F95B2'};
-  background-color: ${({ $isSelected: isSelected, theme }) =>
+  background-color: ${({ $isSelected: isSelected }) =>
     isSelected ? '#DBEDE9' : '#ffffff'};
   color: ${({ $isSelected: isSelected, theme }) =>
     isSelected ? theme.colors.primaryGreen : '#8F95B2'};

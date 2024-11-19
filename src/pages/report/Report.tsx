@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import ArrowIcon from '../../../public/assets/icons/arrow-right-icon.svg';
 import Button from '../../components/Button';

@@ -11,6 +11,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  console.log(errorMessage);
 
   const isFormValid = email.trim() !== '' && password.trim() !== '';
 

@@ -133,8 +133,7 @@ const Notice = styled.p<{ $isValid?: boolean }>`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  color: ${({ $isValid: isValid, theme }) =>
-    isValid ? '${theme.colors.primaryGreen}' : '#FF5E5E'};
+  color: ${({ $isValid: isValid }) => (isValid ? '#4CBFA4' : '#FF5E5E')};
 `;
 
 const NoticeIcon = styled.img`

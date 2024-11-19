@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import BackButton from '../../../components/BackButton';
 import Button from '../../../components/Button';
@@ -16,6 +16,7 @@ export default function AdditionalCheck() {
   const [selectedTeeth, setSelectedTeeth] = useState<number[]>([]);
   const [selectedGums, setSelectedGums] = useState<string[]>([]);
   const [selectedParts, setSelectedParts] = useState<string[]>([]);
+  console.log(painLevel, symptom, selectedTeeth, selectedGums, selectedParts);
 
   const handleToothSelect = (teeth: number[]) => {
     setSelectedTeeth(teeth);

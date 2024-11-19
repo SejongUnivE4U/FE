@@ -14,7 +14,6 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   variant = 'primary',
   disabled = false,
-  type = 'button',
 }) => {
   return (
     <StyledButton onClick={onClick} variant={variant} disabled={disabled}>
