@@ -42,14 +42,15 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 200px;
+  height: 100vh;
 `;
 
 const Content = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 25px;
-  margin-top: 221px;
 `;
 
 const CheckOption = styled.button`

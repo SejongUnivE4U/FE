@@ -84,8 +84,8 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 77px;
-  margin-bottom: 200px;
+  margin-top: calc(7vh);
+  margin-bottom: 130px;
 `;
 
 const Contents = styled.div`

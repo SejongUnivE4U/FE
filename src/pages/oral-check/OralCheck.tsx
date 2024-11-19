@@ -33,8 +33,8 @@ const ContentsContainer = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin-top: 83px;
-  margin-bottom: 200px;
+  margin-top: calc(8vh);
+  margin-bottom: 130px;
 `;
 
 const TitleWrapper = styled.div`
