@@ -24,6 +24,12 @@ export default function OralCheckPhoto() {
     }
   };
 
+  const handleCameraCapture = () => {
+    navigate('/oral-check/camera-capture', {
+      state: { from: '/oral-check/photo' },
+    });
+  };
+
   return (
     <Container>
       <TopBar>
@@ -32,7 +38,7 @@ export default function OralCheckPhoto() {
       <Contents>
         <Title>사진 촬영</Title>
         <OptionsContainer>
-          <Option>
+          <Option onClick={handleCameraCapture}>
             <CircleWrapper $isCamera>
               <OptionIcon src={CameraIcon} alt="사진 촬영 아이콘" />
             </CircleWrapper>
