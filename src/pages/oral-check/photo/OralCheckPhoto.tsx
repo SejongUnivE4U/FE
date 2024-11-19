@@ -8,6 +8,7 @@ import BackButton from '../../../components/BackButton';
 export default function OralCheckPhoto() {
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  console.log(selectedImage);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {

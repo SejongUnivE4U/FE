@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+// import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import LogoImage from '../../../public/assets/icons/logo.svg';
@@ -18,16 +18,16 @@ const messages: Record<StateType, string> = {
 
 export default function Home() {
   const navigate = useNavigate();
-  const [state, setState] = useState<StateType>('initial');
+  // const [state, setState] = useState<StateType>('initial');
 
   const userName = '이포유';
   const score = 25;
   const statusRisk = '매우 위험';
   const totalChecks = 7;
 
-  const handleStateChange = (newState: StateType) => {
-    setState(newState);
-  };
+  // const handleStateChange = (newState: StateType) => {
+  //   setState(newState);
+  // };
 
   return (
     <Container>
@@ -41,7 +41,8 @@ export default function Home() {
 
         <CharacterSection>
           <CharacterImage src={TitiImage} alt="Titi 캐릭터" />
-          <CharacterMessage>{messages[state]}</CharacterMessage>
+          {/* <CharacterMessage>{messages[state]}</CharacterMessage> */}
+          <CharacterMessage>{messages['initial']}</CharacterMessage>
           <ActionButton onClick={() => navigate('/oral-check')}>
             구강 검사 하러가기
           </ActionButton>

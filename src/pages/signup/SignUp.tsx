@@ -86,7 +86,7 @@ export default function SignUp() {
     const age = birthYear ? currentYear - Number(birthYear) : 0;
 
     try {
-      const response = await instance.post('/register', {
+      await instance.post('/register', {
         email,
         password,
         name,

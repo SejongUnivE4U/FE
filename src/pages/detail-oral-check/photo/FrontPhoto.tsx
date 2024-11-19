@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import BackButton from '../../../components/BackButton';
 import Button from '../../../components/Button';
 import ProgressBar from '../../../components/ProgressBar';
@@ -24,6 +23,7 @@ export default function FrontPhoto() {
     if (event.target.files && event.target.files[0]) {
       const reader = new FileReader();
       reader.onload = () => {
+        console.log(selectedImage); //나중에 다시보기
         if (reader.result) {
           setSelectedImage(reader.result as string);
           navigate('/detail-oral-check/front-preview', {

@@ -10,6 +10,7 @@ const CameraCapture: React.FC = () => {
   const [isFacingUser, setIsFacingUser] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  console.log(isCameraActive); //임시
 
   useEffect(() => {
     startCamera();

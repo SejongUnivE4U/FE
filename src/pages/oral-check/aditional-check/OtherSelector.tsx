@@ -84,8 +84,7 @@ const OptionButton = styled.button<{ isSelected: boolean }>`
   border: 1px solid
     ${({ isSelected, theme }) =>
       isSelected ? theme.colors.primaryGreen : '#8F95B2'};
-  background-color: ${({ isSelected, theme }) =>
-    isSelected ? '#DBEDE9' : '#ffffff'};
+  background-color: ${({ isSelected }) => (isSelected ? '#DBEDE9' : '#ffffff')};
   color: ${({ theme }) => theme.colors.textPrimary};
   cursor: pointer;
   transition: background-color 0.3s;
