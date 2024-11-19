@@ -20,6 +20,9 @@ export default function Landing() {
         <Button variant="secondary" onClick={() => navigate('/signup')}>
           회원가입하기
         </Button>
+        <Button variant="secondary" onClick={() => navigate('/home')}>
+          홈으로 (임시)
+        </Button>
       </ButtonWrapper>
     </Container>
   );
@@ -32,6 +35,7 @@ const Container = styled.div`
   align-items: center;
   padding: 0 20px;
   margin-top: 208px;
+  margin-bottom: 200px;
 `;
 
 const Subtitle = styled.h2`
