@@ -75,7 +75,7 @@ const Container = styled.div`
   align-items: center;
   padding: 0 auto;
   margin-top: 100px;
-  margin-bottom: 100px;
+  margin-bottom: 200px;
 `;
 
 const Title = styled.h1`

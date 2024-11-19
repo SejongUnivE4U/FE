@@ -42,6 +42,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 200px;
 `;
 
 const Content = styled.div`

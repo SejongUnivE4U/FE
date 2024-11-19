@@ -41,4 +41,8 @@ export default defineConfig({
       },
     }),
   ],
+  server: {
+    host: '0.0.0.0', // 외부 IP 접근 허용
+    port: 5173, // 기본 포트 설정
+  },
 });

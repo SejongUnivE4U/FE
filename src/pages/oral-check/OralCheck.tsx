@@ -34,6 +34,7 @@ const ContentsContainer = styled.div`
   align-items: center;
   text-align: center;
   margin-top: 83px;
+  margin-bottom: 200px;
 `;
 
 const TitleWrapper = styled.div`
