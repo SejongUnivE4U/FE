@@ -15,7 +15,8 @@ export default function ToothSelector({ onSelectTooth }: ToothSelectorProps) {
       const newSelection = isAlreadySelected
         ? prevSelected.filter((num) => num !== toothNumber)
         : [...prevSelected, toothNumber];
-      onSelectTooth(newSelection);
+      // onSelectTooth(newSelection);
+      setTimeout(() => onSelectTooth(newSelection), 0);
       return newSelection;
     });
   };

@@ -74,7 +74,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   padding: 0 auto;
-  margin-top: calc(7vh);
+  margin-top: calc(8vh);
   margin-bottom: 130px;
 `;
 

@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useAtomValue } from 'jotai';
 import styled from 'styled-components';
 import BackButton from '../../../components/BackButton';
 import Button from '../../../components/Button';
+import { oralImagesAtom } from '../../../state/atoms';
 import GumSelector from './GumSelector';
 import OptionDropdown from './OptionDropdown';
 import OtherSelector from './OtherSelector';
@@ -9,6 +11,9 @@ import PainInput from './PainInput';
 import ToothSelector from './ToothSelector';
 
 export default function AdditionalCheck() {
+  const oralImages = useAtomValue(oralImagesAtom);
+  // console.log(oralImages);
+
   const options = ['치아', '잇몸', '기타'];
   const [selectedOption, setSelectedOption] = useState('치아');
   const [painLevel, setPainLevel] = useState(0);
@@ -16,7 +21,7 @@ export default function AdditionalCheck() {
   const [selectedTeeth, setSelectedTeeth] = useState<number[]>([]);
   const [selectedGums, setSelectedGums] = useState<string[]>([]);
   const [selectedParts, setSelectedParts] = useState<string[]>([]);
-  console.log(painLevel, symptom, selectedTeeth, selectedGums, selectedParts);
+  // console.log(painLevel, symptom, selectedTeeth, selectedGums, selectedParts);
 
   const handleToothSelect = (teeth: number[]) => {
     setSelectedTeeth(teeth);

@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useSetAtom } from 'jotai';
 import styled from 'styled-components';
 import CheckCircleIcon from '../../../../public/assets/icons/check-circle.svg';
 import XCircleIcon from '../../../../public/assets/icons/x-circle.svg';
 import BackButton from '../../../components/BackButton';
 import Button from '../../../components/Button';
+import { oralImagesAtom } from '../../../state/atoms';
 
 export default function PhotoPreview() {
   const navigate = useNavigate();
@@ -12,6 +14,8 @@ export default function PhotoPreview() {
   const { image } = location.state || { image: null };
   const [isPhotoValid, setIsPhotoValid] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const setOralImages = useSetAtom(oralImagesAtom);
 
   useEffect(() => {
     // 임시 서버 검증 로직 시뮬레이션
@@ -24,6 +28,9 @@ export default function PhotoPreview() {
         await new Promise((resolve) => setTimeout(resolve, 1000));
         const isValid = Math.random() > 0.5;
         setIsPhotoValid(isValid);
+        if (isValid && image) {
+          setOralImages((prev) => [...prev, image]);
+        }
       } catch (error) {
         console.error('Error validating photo:', error);
         setIsPhotoValid(false);
