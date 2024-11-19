@@ -121,6 +121,7 @@ const PageContainer = styled.div`
   max-width: 400px;
   margin: 0 auto;
   padding: 20px 20px 60px;
+  margin-bottom: 200px;
 `;
 
 const TopBar = styled.div`
