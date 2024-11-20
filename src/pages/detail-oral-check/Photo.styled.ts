@@ -4,6 +4,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 60px;
 `;
 
 export const TopBar = styled.div`
@@ -25,7 +26,7 @@ export const Title = styled.h1`
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-  margin-top: 40px;
+  margin-top: calc(4vh);
   margin-bottom: 45px;
 `;
 
@@ -48,8 +49,10 @@ export const ButtonContainer = styled.div`
 /** 프리뷰 페이지 */
 
 export const ImagePreview = styled.img`
-  width: 327px;
+  width: auto;
   height: auto;
+  max-width: 237px;
+  max-height: 350px;
   border-radius: 10px;
   margin-top: 70px;
 `;

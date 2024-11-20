@@ -34,6 +34,12 @@ const CameraCapture: React.FC = () => {
   const capturePhoto = () => {
     if (videoRef.current && canvasRef.current) {
       const context = canvasRef.current.getContext('2d');
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
       if (context) {
         context.drawImage(
           videoRef.current,
