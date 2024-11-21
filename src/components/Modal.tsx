@@ -8,6 +8,7 @@ interface ModalProps {
   onClose: () => void;
   buttonText?: string;
   onConfirm?: () => void;
+  additionalMessage?: string;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -16,6 +17,7 @@ const Modal: React.FC<ModalProps> = ({
   onClose,
   buttonText = '확인',
   onConfirm,
+  additionalMessage,
 }) => {
   if (!isOpen) return null;
 
@@ -28,10 +30,15 @@ const Modal: React.FC<ModalProps> = ({
 
   return (
     <Overlay>
-      <ModalContainer>
+      <ModalContainer $hasAdditionalMessage={!!additionalMessage}>
         <CloseIcon src={XIcon} alt="Close" onClick={onClose} />
-        <ModalContent>{title}</ModalContent>
-        <ConfirmButton onClick={handleConfirm}>{buttonText}</ConfirmButton>
+        <ModalContentWrapper $hasAdditionalMessage={!!additionalMessage}>
+          <ModalContent>{title}</ModalContent>
+          {additionalMessage && (
+            <AdditionalMessage>{additionalMessage}</AdditionalMessage>
+          )}
+          <ConfirmButton onClick={handleConfirm}>{buttonText}</ConfirmButton>
+        </ModalContentWrapper>
       </ModalContainer>
     </Overlay>
   );
@@ -52,10 +59,11 @@ const Overlay = styled.div`
   z-index: 1000;
 `;
 
-const ModalContainer = styled.div`
+const ModalContainer = styled.div<{ $hasAdditionalMessage: boolean }>`
   background: #ffffff;
   width: 275px;
-  height: 180px;
+  height: ${({ $hasAdditionalMessage }) =>
+    $hasAdditionalMessage ? '200px' : '180px'};
   border-radius: 10px;
   position: relative;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -70,6 +78,16 @@ const CloseIcon = styled.img`
   height: 25px;
 `;
 
+const ModalContentWrapper = styled.div<{ $hasAdditionalMessage: boolean }>`
+  margin-top: 53px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: ${({ $hasAdditionalMessage }) =>
+    $hasAdditionalMessage ? '120px' : '100px'};
+`;
+
 const ModalContent = styled.p`
   width: 220px;
   color: #4b4b4b;
@@ -79,8 +97,20 @@ const ModalContent = styled.p`
   font-style: normal;
   font-weight: 500;
   line-height: 24px;
-  margin: 20px auto;
-  margin-top: 56px;
+  margin: 0px auto;
+  word-break: keep-all;
+`;
+
+const AdditionalMessage = styled.p`
+  width: 220px;
+  color: #b3b3b3;
+  font-family: Pretendard;
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  margin: 0px auto;
   word-break: keep-all;
 `;
 

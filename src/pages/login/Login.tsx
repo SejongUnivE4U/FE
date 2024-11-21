@@ -9,14 +9,25 @@ import Modal from '../../components/Modal';
 export default function Login() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const [additionalMessage, setAdditionalMessage] = useState('');
+  const [onModalCloseAction, setOnModalCloseAction] = useState<
+    (() => void) | null
+  >(null);
 
-  const handleOpenModal = (message: string) => {
+  const handleOpenModal = (
+    message: string,
+    onCloseAction?: () => void,
+    additionalMsg?: string,
+  ) => {
     setModalMessage(message);
+    setAdditionalMessage(additionalMsg || '');
+    setOnModalCloseAction(() => onCloseAction || null);
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    if (onModalCloseAction) onModalCloseAction();
   };
 
   const [email, setEmail] = useState('');
@@ -33,11 +44,13 @@ export default function Login() {
     try {
       const response = await instance.post('/login', { email, password });
       Cookies.set('refreshToken', response.data.refreshToken);
-
-      alert('로그인 성공');
-      navigate('/home');
+      handleOpenModal(
+        '로그인에 성공하였습니다.',
+        () => navigate('/home'),
+        '홈 화면으로 이동합니다.',
+      );
     } catch (error) {
-      handleOpenModal('정확하지 않은 이메일이거나\n비밀번호입니다.');
+      handleOpenModal('정확하지 않은 이메일이거나 비밀번호입니다.');
     }
   };
 
@@ -82,6 +95,7 @@ export default function Login() {
       <Modal
         isOpen={isModalOpen}
         title={modalMessage}
+        additionalMessage={additionalMessage}
         onClose={handleCloseModal}
         buttonText="확인"
       />
