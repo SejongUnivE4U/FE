@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BackButton from '../../../components/BackButton';
 import Button from '../../../components/Button';
@@ -17,21 +16,13 @@ export default function FrontPhoto() {
   const steps = ['정면', '상악', '하악'];
   const currentStep = 0;
   const navigate = useNavigate();
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        console.log(selectedImage); //나중에 다시보기
-        if (reader.result) {
-          setSelectedImage(reader.result as string);
-          navigate('/detail-oral-check/front-preview', {
-            state: { image: reader.result },
-          });
-        }
-      };
-      reader.readAsDataURL(event.target.files[0]);
+      const file = event.target.files[0];
+      navigate('/detail-oral-check/front-preview', {
+        state: { image: file },
+      });
     }
   };
 

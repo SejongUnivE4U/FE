@@ -1,64 +1,33 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useSetAtom } from 'jotai';
 import styled from 'styled-components';
 import CheckCircleIcon from '../../../../public/assets/icons/check-circle.svg';
 import XCircleIcon from '../../../../public/assets/icons/x-circle.svg';
+import { uploadImage } from '../../../api/reportApis';
 import BackButton from '../../../components/BackButton';
 import Button from '../../../components/Button';
-import { oralImagesAtom } from '../../../state/atoms';
+import { usePhotoValidation } from '../../../hooks/usePhotoValidation';
 
 export default function PhotoPreview() {
   const navigate = useNavigate();
   const location = useLocation();
   const { image } = location.state || { image: null };
-  const [isPhotoValid, setIsPhotoValid] = useState<boolean | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const setOralImages = useSetAtom(oralImagesAtom);
-
-  useEffect(() => {
-    // 임시 서버 검증 로직 시뮬레이션
-    const validatePhoto = async () => {
-      setIsLoading(true);
-      try {
-        //API 호출 코드
-
-        // 임시로 2초 후 유효 여부를 랜덤하게 결정
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        const isValid = Math.random() > 0.5;
-        setIsPhotoValid(isValid);
-        if (isValid && image) {
-          setOralImages((prev) => [...prev, image]);
-        }
-      } catch (error) {
-        console.error('Error validating photo:', error);
-        setIsPhotoValid(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (image) {
-      validatePhoto();
-    } else {
-      setIsPhotoValid(false);
-      setIsLoading(false);
-    }
-  }, [image]);
+  const { isPhotoValid, isLoading } = usePhotoValidation(image as File | null);
 
   return (
     <Container>
-      <TopBar>
-        <BackButton to="/oral-check/photo" />
-      </TopBar>
+      <TopBar></TopBar>
       <Contents>
         <Title>검사 사진</Title>
         {isLoading ? (
           <LoadingMessage>검사 중입니다...</LoadingMessage>
         ) : image ? (
           <>
-            <ImagePreview src={image} alt="Uploaded Preview" />
+            <ImagePreview
+              src={URL.createObjectURL(image)}
+              alt="Uploaded Preview"
+            />
+
             <NoticeWrapper>
               <NoticeIcon src={isPhotoValid ? CheckCircleIcon : XCircleIcon} />
               <Notice $isValid={isPhotoValid || false}>
@@ -67,11 +36,15 @@ export default function PhotoPreview() {
                   : '구강을 인식할 수 없습니다. 다시 촬영해 주세요.'}
               </Notice>
             </NoticeWrapper>
-            <ReSelectButtonWrapper>
-              <ReSelectButton onClick={() => navigate('/oral-check/photo')}>
-                재선택 하기
-              </ReSelectButton>
-            </ReSelectButtonWrapper>
+            {!isPhotoValid && (
+              <ReSelectButtonWrapper>
+                <ReSelectButton
+                  onClick={() => navigate('/detail-oral-check/front-photo')}
+                >
+                  재선택 하기
+                </ReSelectButton>
+              </ReSelectButtonWrapper>
+            )}
             <ButtonContainer>
               <Button
                 variant="primary"

@@ -48,34 +48,72 @@ const CameraCapture: React.FC = () => {
           canvasRef.current.width,
           canvasRef.current.height,
         );
-        const imageDataUrl = canvasRef.current.toDataURL('image/png');
-        console.log(location.state);
-        if (location.state && location.state.from === '/oral-check/photo') {
-          navigate('/oral-check/photo-preview', {
-            state: { image: imageDataUrl },
-          });
-        } else if (
-          location.state &&
-          location.state.from === '/detail-oral-check/front-photo'
-        ) {
-          navigate('/detail-oral-check/front-preview', {
-            state: { image: imageDataUrl },
-          });
-        } else if (
-          location.state &&
-          location.state.from === '/detail-oral-check/upper-photo'
-        ) {
-          navigate('/detail-oral-check/upper-preview', {
-            state: { image: imageDataUrl },
-          });
-        } else if (
-          location.state &&
-          location.state.from === '/detail-oral-check/lower-photo'
-        ) {
-          navigate('/detail-oral-check/lower-preview', {
-            state: { image: imageDataUrl },
-          });
-        }
+
+        canvas.toBlob((blob) => {
+          if (blob) {
+            const file = new File([blob], 'captured-image.png', {
+              type: 'image/png',
+            });
+
+            if (location.state && location.state.from === '/oral-check/photo') {
+              navigate('/oral-check/photo-preview', {
+                state: { image: file },
+              });
+            } else if (
+              location.state &&
+              location.state.from === '/detail-oral-check/front-photo'
+            ) {
+              navigate('/detail-oral-check/front-preview', {
+                state: { image: file },
+              });
+            } else if (
+              location.state &&
+              location.state.from === '/detail-oral-check/upper-photo'
+            ) {
+              navigate('/detail-oral-check/upper-preview', {
+                state: { image: file },
+              });
+            } else if (
+              location.state &&
+              location.state.from === '/detail-oral-check/lower-photo'
+            ) {
+              navigate('/detail-oral-check/lower-preview', {
+                state: { image: file },
+              });
+            }
+
+            stopCamera();
+          }
+        }, 'image/png');
+
+        // const imageDataUrl = canvasRef.current.toDataURL('image/png');
+        // console.log(location.state);
+        // if (location.state && location.state.from === '/oral-check/photo') {
+        //   navigate('/oral-check/photo-preview', {
+        //     state: { image: imageDataUrl },
+        //   });
+        // } else if (
+        //   location.state &&
+        //   location.state.from === '/detail-oral-check/front-photo'
+        // ) {
+        //   navigate('/detail-oral-check/front-preview', {
+        //     state: { image: imageDataUrl },
+        //   });
+        // } else if (
+        //   location.state &&
+        //   location.state.from === '/detail-oral-check/upper-photo'
+        // ) {
+        //   navigate('/detail-oral-check/upper-preview', {
+        //     state: { image: imageDataUrl },
+        //   });
+        // } else if (
+        //   location.state &&
+        //   location.state.from === '/detail-oral-check/lower-photo'
+        // ) {
+        //   navigate('/detail-oral-check/lower-preview', {
+        //     state: { image: imageDataUrl },
+        //   });
+        // }
 
         stopCamera();
       }

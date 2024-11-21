@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { changePassword } from '../../api/userApis';
 import Button from '../../components/Button';
 
 export default function AccountSetting() {
@@ -7,6 +8,7 @@ export default function AccountSetting() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlePasswordConfirmation = (value: string) => {
     setConfirmNewPassword(value);
@@ -14,6 +16,27 @@ export default function AccountSetting() {
       setPasswordError('비밀번호가 일치하지 않습니다.');
     } else {
       setPasswordError(null);
+    }
+  };
+
+  const isButtonEnabled = newPassword && confirmNewPassword && !passwordError;
+
+  // 비밀번호 변경 요청
+  const handleChangePassword = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!isButtonEnabled) return;
+
+    setIsLoading(true);
+    try {
+      await changePassword(newPassword);
+      alert('비밀번호가 성공적으로 변경되었습니다.');
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmNewPassword('');
+    } catch (error) {
+      alert('비밀번호 변경 중 오류가 발생했습니다. 다시 시도해주세요.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -49,8 +72,11 @@ export default function AccountSetting() {
           {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
         </InputWrapper>
         <ChangePasswordButtonWrapper>
-          <ChangePasswordButton onClick={() => alert('비밀번호 변경')}>
-            변경하기
+          <ChangePasswordButton
+            onClick={handleChangePassword}
+            disabled={!isButtonEnabled}
+          >
+            {isLoading ? '변경 중...' : '변경하기'}
           </ChangePasswordButton>
         </ChangePasswordButtonWrapper>
 
@@ -149,10 +175,13 @@ const ChangePasswordButton = styled.button`
   font-weight: 600;
   line-height: 24px;
   background-color: ${({ theme }) => theme.colors.primaryGreen};
+  background-color: ${({ theme, disabled }) =>
+    disabled ? '#C6CADA' : theme.colors.primaryGreen};
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   color: ${({ theme }) => theme.colors.textWhite};
   border: none;
   &:active {
-    background-color: #32a68a;
+    background-color: ${({ disabled }) => (disabled ? '#C6CADA' : '#32a68a')};
   }
 `;
 

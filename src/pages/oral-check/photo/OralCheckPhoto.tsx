@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CameraIcon from '../../../../public/assets/icons/camera-icon.svg';
@@ -7,21 +6,13 @@ import BackButton from '../../../components/BackButton';
 
 export default function OralCheckPhoto() {
   const navigate = useNavigate();
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  console.log(selectedImage);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (reader.result) {
-          setSelectedImage(reader.result as string);
-          navigate('/oral-check/photo-preview', {
-            state: { image: reader.result },
-          });
-        }
-      };
-      reader.readAsDataURL(event.target.files[0]);
+      const file = event.target.files[0];
+      navigate('/oral-check/photo-preview', {
+        state: { image: file },
+      });
     }
   };
 

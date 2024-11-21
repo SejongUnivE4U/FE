@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useAtomValue } from 'jotai';
+import { useEffect, useState } from 'react';
+import { useAtomValue, useSetAtom } from 'jotai';
 import styled from 'styled-components';
 import BackButton from '../../../components/BackButton';
 import Button from '../../../components/Button';
@@ -12,7 +12,7 @@ import ToothSelector from './ToothSelector';
 
 export default function AdditionalCheck() {
   const oralImages = useAtomValue(oralImagesAtom);
-  // console.log(oralImages);
+  const setOralImages = useSetAtom(oralImagesAtom);
 
   const options = ['치아', '잇몸', '기타'];
   const [selectedOption, setSelectedOption] = useState('치아');
@@ -21,7 +21,12 @@ export default function AdditionalCheck() {
   const [selectedTeeth, setSelectedTeeth] = useState<number[]>([]);
   const [selectedGums, setSelectedGums] = useState<string[]>([]);
   const [selectedParts, setSelectedParts] = useState<string[]>([]);
-  // console.log(painLevel, symptom, selectedTeeth, selectedGums, selectedParts);
+
+  useEffect(() => {
+    setSelectedTeeth([]);
+    setSelectedGums([]);
+    setSelectedParts([]);
+  }, [selectedOption]);
 
   const handleToothSelect = (teeth: number[]) => {
     setSelectedTeeth(teeth);
@@ -33,8 +38,19 @@ export default function AdditionalCheck() {
     setSelectedParts(parts);
   };
 
+  //임시 검사 로직
   const handleComplete = () => {
-    // Logic to handle completion (to be added later)
+    const requestData = {
+      painLevel,
+      symptom,
+      selectedTeeth,
+      selectedGums,
+      selectedParts,
+      oralImages,
+    };
+    console.log('검사 요청 데이터:', requestData);
+    setOralImages([]);
+    console.log('oralImages 초기화 완료');
   };
 
   const handleSkip = () => {

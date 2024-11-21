@@ -9,3 +9,13 @@ export const fetchUserData = async () => {
     throw error;
   }
 };
+
+// export const changePassword = async (password: string) => {
+//   try {
+//     const response = await instance.post('/user/set-info', { password });
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error changing password:', error);
+//     throw error;
+//   }
+// };
