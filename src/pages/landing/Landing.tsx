@@ -34,8 +34,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   padding: 0 20px;
-  margin-top: 208px;
-  margin-bottom: 200px;
+  height: 100vh;
 `;
 
 const Subtitle = styled.h2`

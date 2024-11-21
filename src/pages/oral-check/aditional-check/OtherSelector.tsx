@@ -17,7 +17,7 @@ const OtherSelector: React.FC<OtherSelectorProps> = ({ onSelectPart }) => {
       const newSelection = isAlreadySelected
         ? prevSelected.filter((item) => item !== part)
         : [...prevSelected, part];
-      onSelectPart(newSelection);
+      setTimeout(() => onSelectPart(newSelection), 0);
       return newSelection;
     });
   };
@@ -35,7 +35,7 @@ const OtherSelector: React.FC<OtherSelectorProps> = ({ onSelectPart }) => {
         {options.map(({ label, img }) => (
           <OptionButton
             key={label}
-            isSelected={selectedParts.includes(label)}
+            $isSelected={selectedParts.includes(label)}
             onClick={() => handlePartClick(label)}
           >
             {img ? (
@@ -74,7 +74,7 @@ const OptionsContainer = styled.div`
   margin-bottom: 20px;
 `;
 
-const OptionButton = styled.button<{ isSelected: boolean }>`
+const OptionButton = styled.button<{ $isSelected: boolean }>`
   width: 157px;
   height: 102px;
   display: flex;
@@ -82,9 +82,10 @@ const OptionButton = styled.button<{ isSelected: boolean }>`
   justify-content: center;
   border-radius: 15px;
   border: 1px solid
-    ${({ isSelected, theme }) =>
+    ${({ $isSelected: isSelected, theme }) =>
       isSelected ? theme.colors.primaryGreen : '#8F95B2'};
-  background-color: ${({ isSelected }) => (isSelected ? '#DBEDE9' : '#ffffff')};
+  background-color: ${({ $isSelected: isSelected }) =>
+    isSelected ? '#DBEDE9' : '#ffffff'};
   color: ${({ theme }) => theme.colors.textPrimary};
   cursor: pointer;
   transition: background-color 0.3s;

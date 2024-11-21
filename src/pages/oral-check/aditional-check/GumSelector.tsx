@@ -15,7 +15,7 @@ const GumSelector: React.FC<GumSelectorProps> = ({ onSelectGum }) => {
       const newSelection = isAlreadySelected
         ? prevSelected.filter((item) => item !== area)
         : [...prevSelected, area];
-      onSelectGum(newSelection);
+      setTimeout(() => onSelectGum(newSelection), 0);
       return newSelection;
     });
   };

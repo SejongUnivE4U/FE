@@ -1,8 +1,10 @@
 // import { useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import LogoImage from '../../../public/assets/icons/logo.svg';
 import TitiImage from '../../../public/assets/images/character.png';
+import { fetchUserData } from '../../api/userApis';
 import Carousel from '../../components/Carousel';
 import ScoreDonut from '../../components/ScoreDonut';
 
@@ -24,6 +26,20 @@ export default function Home() {
   const score = 25;
   const statusRisk = '매우 위험';
   const totalChecks = 7;
+
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const userData = await fetchUserData();
+        console.log('Fetched User Data:', userData);
+        // You can set the user data to state here if needed
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+      }
+    };
+
+    getUserData();
+  }, []);
 
   // const handleStateChange = (newState: StateType) => {
   //   setState(newState);
@@ -78,8 +94,8 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 77px;
-  margin-bottom: 200px;
+  margin-top: calc(7vh);
+  margin-bottom: 120px;
 `;
 
 const ContentsContainer = styled.div`

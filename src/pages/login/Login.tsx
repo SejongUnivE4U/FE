@@ -1,17 +1,38 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import Cookies from 'js-cookie';
 import styled from 'styled-components';
 import instance from '../../api/axios';
 import Button from '../../components/Button';
+import Modal from '../../components/Modal';
 
 export default function Login() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [additionalMessage, setAdditionalMessage] = useState('');
+  const [onModalCloseAction, setOnModalCloseAction] = useState<
+    (() => void) | null
+  >(null);
+
+  const handleOpenModal = (
+    message: string,
+    onCloseAction?: () => void,
+    additionalMsg?: string,
+  ) => {
+    setModalMessage(message);
+    setAdditionalMessage(additionalMsg || '');
+    setOnModalCloseAction(() => onCloseAction || null);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    if (onModalCloseAction) onModalCloseAction();
+  };
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [focusedField, setFocusedField] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  console.log(errorMessage);
 
   const isFormValid = email.trim() !== '' && password.trim() !== '';
 
@@ -23,17 +44,13 @@ export default function Login() {
     try {
       const response = await instance.post('/login', { email, password });
       Cookies.set('refreshToken', response.data.refreshToken);
-
-      alert('로그인 성공');
-      navigate('/home');
+      handleOpenModal(
+        '로그인에 성공하였습니다.',
+        () => navigate('/home'),
+        '홈 화면으로 이동합니다.',
+      );
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        setErrorMessage(
-          error.response.data.message || '로그인에 실패했습니다.',
-        );
-      } else {
-        setErrorMessage('네트워크 오류가 발생했습니다. 다시 시도해 주세요.');
-      }
+      handleOpenModal('정확하지 않은 이메일이거나 비밀번호입니다.');
     }
   };
 
@@ -75,6 +92,13 @@ export default function Login() {
         </Button>
       </Form>
       <SignUpText onClick={() => navigate('/signup')}>회원가입</SignUpText>
+      <Modal
+        isOpen={isModalOpen}
+        title={modalMessage}
+        additionalMessage={additionalMessage}
+        onClose={handleCloseModal}
+        buttonText="확인"
+      />
     </Container>
   );
 }
@@ -84,8 +108,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 224px;
-  margin-bottom: 200px;
+  height: 100vh;
 `;
 
 const Title = styled.h1`
