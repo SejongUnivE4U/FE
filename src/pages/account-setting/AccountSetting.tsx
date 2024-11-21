@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { changePassword } from '../../api/userApis';
 import Button from '../../components/Button';
 
 export default function AccountSetting() {
@@ -28,8 +27,8 @@ export default function AccountSetting() {
 
     setIsLoading(true);
     try {
-      await changePassword(newPassword);
-      alert('비밀번호가 성공적으로 변경되었습니다.');
+      // await changePassword(newPassword);
+      // alert('비밀번호가 성공적으로 변경되었습니다.');
       setCurrentPassword('');
       setNewPassword('');
       setConfirmNewPassword('');

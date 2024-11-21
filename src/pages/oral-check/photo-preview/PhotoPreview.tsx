@@ -1,10 +1,7 @@
-import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import CheckCircleIcon from '../../../../public/assets/icons/check-circle.svg';
 import XCircleIcon from '../../../../public/assets/icons/x-circle.svg';
-import { uploadImage } from '../../../api/reportApis';
-import BackButton from '../../../components/BackButton';
 import Button from '../../../components/Button';
 import { usePhotoValidation } from '../../../hooks/usePhotoValidation';
 

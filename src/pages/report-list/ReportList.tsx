@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 import Carousel from '../../components/Carousel';
 import Graph from './Graph';
@@ -20,12 +19,18 @@ export default function ReportList() {
     { diagnosisId: 10, reportScore: 20 },
   ];
 
-  const [problemTeeth, setProblemTeeth] = useState<number[]>([
+  // const [problemTeeth, setProblemTeeth] = useState<number[]>([
+  //   // 11, 12, 13, 14, 15, 16, 17, 18, 21, 22, 23, 24, 25, 26, 27, 28, 31, 32, 33,
+  //   // 34, 35, 36, 37, 38, 41, 42, 43, 44, 45, 46, 47, 48,
+  //   11,
+  //   12, 13, 25, 28, 35, 37, 52,
+  // ]);
+  const problemTeeth = [
     // 11, 12, 13, 14, 15, 16, 17, 18, 21, 22, 23, 24, 25, 26, 27, 28, 31, 32, 33,
     // 34, 35, 36, 37, 38, 41, 42, 43, 44, 45, 46, 47, 48,
     11,
     12, 13, 25, 28, 35, 37, 52,
-  ]);
+  ];
 
   return (
     <Container>
