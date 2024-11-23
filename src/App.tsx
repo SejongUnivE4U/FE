@@ -15,6 +15,7 @@ import Login from './pages/login/Login';
 import OralCheck from './pages/oral-check/OralCheck';
 import AdditionalCheck from './pages/oral-check/aditional-check/AditionalCheck';
 import CameraCapture from './pages/oral-check/camera-capture/CameraCapture';
+import OralCheckGuide from './pages/oral-check/guide/OralCheckGuide';
 import PhotoPreview from './pages/oral-check/photo-preview/PhotoPreview';
 import OralCheckPhoto from './pages/oral-check/photo/OralCheckPhoto';
 import OralCheckType from './pages/oral-check/type/OralCheckType';
@@ -43,6 +44,7 @@ function App() {
             <Route path="/account-setting" element={<AccountSetting />} />
 
             <Route path="/oral-check" element={<OralCheck />} />
+            <Route path="/oral-check/guide" element={<OralCheckGuide />} />
             <Route path="/oral-check/type" element={<OralCheckType />} />
             <Route path="/oral-check/photo" element={<OralCheckPhoto />} />
             <Route
