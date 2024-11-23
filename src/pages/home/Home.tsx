@@ -238,7 +238,6 @@ const StatusBoxLabel = styled.p`
 const StatusRisk = styled.p`
   font-family: Pretendard;
   color: #ff5e5e;
-  font-family: 'Pretendard Variable';
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
@@ -248,7 +247,6 @@ const StatusRisk = styled.p`
 const TotalChecksCount = styled.p`
   font-family: Pretendard;
   color: #334155;
-  font-family: 'Pretendard Variable';
   font-size: 20px;
   font-style: normal;
   font-weight: 700;

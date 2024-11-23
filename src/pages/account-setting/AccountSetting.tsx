@@ -1,50 +1,31 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import styled from 'styled-components';
 import Button from '../../components/Button';
 
 export default function AccountSetting() {
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmNewPassword, setConfirmNewPassword] = useState('');
-  const [passwordError, setPasswordError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [currentPassword, setCurrentPassword] = useState('');
+  // const [newPassword, setNewPassword] = useState('');
+  // const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  // const [passwordError, setPasswordError] = useState<string | null>(null);
+  // const [isLoading, setIsLoading] = useState(false);
 
-  const handlePasswordConfirmation = (value: string) => {
-    setConfirmNewPassword(value);
-    if (newPassword !== value) {
-      setPasswordError('비밀번호가 일치하지 않습니다.');
-    } else {
-      setPasswordError(null);
-    }
-  };
+  // const handlePasswordConfirmation = (value: string) => {
+  //   setConfirmNewPassword(value);
+  //   if (newPassword !== value) {
+  //     setPasswordError('비밀번호가 일치하지 않습니다.');
+  //   } else {
+  //     setPasswordError(null);
+  //   }
+  // };
 
-  const isButtonEnabled = newPassword && confirmNewPassword && !passwordError;
-
-  // 비밀번호 변경 요청
-  const handleChangePassword = async (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!isButtonEnabled) return;
-
-    setIsLoading(true);
-    try {
-      // await changePassword(newPassword);
-      // alert('비밀번호가 성공적으로 변경되었습니다.');
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmNewPassword('');
-    } catch (error) {
-      alert('비밀번호 변경 중 오류가 발생했습니다. 다시 시도해주세요.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // const isButtonEnabled = newPassword && confirmNewPassword && !passwordError;
 
   return (
     <Container>
       <Title>계정 설정</Title>
 
       <Form>
-        <SectionTitle>비밀번호 변경</SectionTitle>
+        {/* <SectionTitle>비밀번호 변경</SectionTitle>
         <InputWrapper>
           <Input
             type="password"
@@ -72,12 +53,11 @@ export default function AccountSetting() {
         </InputWrapper>
         <ChangePasswordButtonWrapper>
           <ChangePasswordButton
-            onClick={handleChangePassword}
             disabled={!isButtonEnabled}
           >
             {isLoading ? '변경 중...' : '변경하기'}
           </ChangePasswordButton>
-        </ChangePasswordButtonWrapper>
+        </ChangePasswordButtonWrapper> */}
 
         <LogoutButtonWrapper>
           <Button variant="outline" onClick={() => alert('로그아웃')}>
@@ -99,7 +79,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   padding: 0 auto;
-  margin-top: calc(8vh);
+  margin-top: calc(20vh);
   margin-bottom: 130px;
 `;
 
@@ -118,80 +98,81 @@ const Form = styled.form`
   flex-direction: column;
 `;
 
-const SectionTitle = styled.h2`
-  font-family: Pretendard;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 24px;
-  color: ${({ theme }) => theme.colors.textPrimary};
-  margin-bottom: 10px;
-`;
+// const SectionTitle = styled.h2`
+//   font-family: Pretendard;
+//   font-size: 14px;
+//   font-style: normal;
+//   font-weight: 400;
+//   line-height: 24px;
+//   color: ${({ theme }) => theme.colors.textPrimary};
+//   margin-bottom: 10px;
+// `;
 
-const InputWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 8px;
-`;
+// const InputWrapper = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   align-items: flex-start;
+//   gap: 10px;
+//   margin-bottom: 8px;
+// `;
 
-const Input = styled.input`
-  width: 335px;
-  height: 45px;
-  padding: 14px 20px;
-  color: ${({ theme }) => theme.colors.textPrimary};
-  border-radius: 10px;
-  background: #f7f7fa;
-  border: 1px solid transparent;
+// const Input = styled.input`
+//   width: 335px;
+//   height: 45px;
+//   padding: 14px 20px;
+//   color: ${({ theme }) => theme.colors.textPrimary};
+//   border-radius: 10px;
+//   background: #f7f7fa;
+//   border: 1px solid transparent;
 
-  &::placeholder {
-    color: #8f95b2;
-  }
-`;
+//   &::placeholder {
+//     color: #8f95b2;
+//   }
+// `;
 
-const ChangePasswordButtonWrapper = styled.div`
-  margin-top: 16px;
-  margin-bottom: 58px;
-  display: flex;
-  justify-content: right;
-`;
+// const ChangePasswordButtonWrapper = styled.div`
+//   margin-top: 16px;
+//   margin-bottom: 58px;
+//   display: flex;
+//   justify-content: right;
+// `;
 
-const ChangePasswordButton = styled.button`
-  display: flex;
-  width: 90px;
-  height: 40px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-  border: none;
-  border-radius: 10px;
-  text-align: center;
-  font-family: Pretendard;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 24px;
-  background-color: ${({ theme }) => theme.colors.primaryGreen};
-  background-color: ${({ theme, disabled }) =>
-    disabled ? '#C6CADA' : theme.colors.primaryGreen};
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-  color: ${({ theme }) => theme.colors.textWhite};
-  border: none;
-  &:active {
-    background-color: ${({ disabled }) => (disabled ? '#C6CADA' : '#32a68a')};
-  }
-`;
+// const ChangePasswordButton = styled.button`
+//   display: flex;
+//   width: 90px;
+//   height: 40px;
+//   justify-content: center;
+//   align-items: center;
+//   gap: 10px;
+//   flex-shrink: 0;
+//   border: none;
+//   border-radius: 10px;
+//   text-align: center;
+//   font-family: Pretendard;
+//   font-size: 14px;
+//   font-style: normal;
+//   font-weight: 600;
+//   line-height: 24px;
+//   background-color: ${({ theme }) => theme.colors.primaryGreen};
+//   background-color: ${({ theme, disabled }) =>
+//     disabled ? '#C6CADA' : theme.colors.primaryGreen};
+//   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+//   color: ${({ theme }) => theme.colors.textWhite};
+//   border: none;
+//   &:active {
+//     background-color: ${({ disabled }) => (disabled ? '#C6CADA' : '#32a68a')};
+//   }
+// `;
 
 const LogoutButtonWrapper = styled.div`
-  margin-bottom: 24px;
+  margin-top: 70px;
+  margin-bottom: 70px;
 `;
 
-const ErrorMessage = styled.span`
-  color: #d14343;
-  font-family: Pretendard;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 18px;
-`;
+// const ErrorMessage = styled.span`
+//   color: #d14343;
+//   font-family: Pretendard;
+//   font-size: 12px;
+//   font-weight: 400;
+//   line-height: 18px;
+// `;
