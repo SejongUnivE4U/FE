@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import LogoImage from '../../../public/assets/icons/logo.svg';
 import TitiImage from '../../../public/assets/images/character.png';
+import ToothImage from '../../../public/assets/images/tooth-img.svg';
 import { fetchUserData } from '../../api/userApis';
 import Carousel from '../../components/Carousel';
 import ScoreDonut from '../../components/ScoreDonut';
@@ -82,7 +83,21 @@ export default function Home() {
               </StatusTextContainer>
             </StatusSection>
           </div>
-          <div>Content 2</div>
+          <div>
+            <DentalInfoSection>
+              <ToothImageStyled src={ToothImage} alt="치아 이미지" />
+              <TextAndButtonWrapper>
+                <InfoText>
+                  치료가 필요하신가요?
+                  <br />
+                  가까운 치과를 확인해보세요!
+                </InfoText>
+                <NearbyButton onClick={() => navigate('/map')}>
+                  주변 치과 보기
+                </NearbyButton>
+              </TextAndButtonWrapper>
+            </DentalInfoSection>
+          </div>
         </Carousel>
       </ContentsContainer>
     </Container>
@@ -238,4 +253,51 @@ const TotalChecksCount = styled.p`
   font-style: normal;
   font-weight: 700;
   line-height: 22px;
+`;
+
+const DentalInfoSection = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f7f7fa;
+  width: 100%;
+  height: 112px;
+`;
+
+const ToothImageStyled = styled.img`
+  width: 82px;
+  height: auto;
+`;
+
+const TextAndButtonWrapper = styled.div`
+  width: 146px;
+  margin-left: 31px;
+`;
+
+const InfoText = styled.p`
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px;
+  color: ${({ theme }) => theme.colors.primaryText};
+  margin-bottom: 15px;
+`;
+
+const NearbyButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 146px;
+  height: 51px;
+  background-color: #334155;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  cursor: pointer;
 `;
