@@ -10,12 +10,12 @@ export const fetchUserData = async () => {
   }
 };
 
-// export const changePassword = async (password: string) => {
-//   try {
-//     const response = await instance.post('/user/set-info', { password });
-//     return response.data;
-//   } catch (error) {
-//     console.error('Error changing password:', error);
-//     throw error;
-//   }
-// };
+export const logoutUser = async () => {
+  try {
+    const response = await instance.post('/logout');
+    return response.data;
+  } catch (error) {
+    console.error('Error during logout:', error);
+    throw error;
+  }
+};
