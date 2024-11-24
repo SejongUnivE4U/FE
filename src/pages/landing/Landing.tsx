@@ -20,9 +20,6 @@ export default function Landing() {
         <Button variant="secondary" onClick={() => navigate('/signup')}>
           회원가입하기
         </Button>
-        <Button variant="secondary" onClick={() => navigate('/home')}>
-          홈으로 (임시)
-        </Button>
       </ButtonWrapper>
     </Container>
   );

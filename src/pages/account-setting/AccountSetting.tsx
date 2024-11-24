@@ -14,7 +14,7 @@ export default function AccountSetting() {
     try {
       await logoutUser();
       Cookies.remove('refreshToken');
-      navigate('/login');
+      navigate('/');
     } catch (error) {
       console.error('Logout failed:', error);
     }
