@@ -1,16 +1,16 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import LipGuideImage from '../../../../public/assets/icons/lip-guide.svg';
+import FrontGuideImage from '../../../../public/assets/images/camera-guide-front.svg';
+import LowerGuideImage from '../../../../public/assets/images/camera-guide-lower.svg';
+import UpperGuideImage from '../../../../public/assets/images/camera-guide-upper.svg';
 
 const CameraCapture: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [isCameraActive, setIsCameraActive] = useState(false);
   const [isFacingUser, setIsFacingUser] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(isCameraActive); //임시
 
   useEffect(() => {
     startCamera();
@@ -24,7 +24,6 @@ const CameraCapture: React.FC = () => {
       });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        setIsCameraActive(true);
       }
     } catch (err) {
       console.error('Error accessing camera:', err);
@@ -85,36 +84,6 @@ const CameraCapture: React.FC = () => {
             stopCamera();
           }
         }, 'image/png');
-
-        // const imageDataUrl = canvasRef.current.toDataURL('image/png');
-        // console.log(location.state);
-        // if (location.state && location.state.from === '/oral-check/photo') {
-        //   navigate('/oral-check/photo-preview', {
-        //     state: { image: imageDataUrl },
-        //   });
-        // } else if (
-        //   location.state &&
-        //   location.state.from === '/detail-oral-check/front-photo'
-        // ) {
-        //   navigate('/detail-oral-check/front-preview', {
-        //     state: { image: imageDataUrl },
-        //   });
-        // } else if (
-        //   location.state &&
-        //   location.state.from === '/detail-oral-check/upper-photo'
-        // ) {
-        //   navigate('/detail-oral-check/upper-preview', {
-        //     state: { image: imageDataUrl },
-        //   });
-        // } else if (
-        //   location.state &&
-        //   location.state.from === '/detail-oral-check/lower-photo'
-        // ) {
-        //   navigate('/detail-oral-check/lower-preview', {
-        //     state: { image: imageDataUrl },
-        //   });
-        // }
-
         stopCamera();
       }
     }
@@ -125,7 +94,6 @@ const CameraCapture: React.FC = () => {
       const stream = videoRef.current.srcObject as MediaStream;
       const tracks = stream.getTracks();
       tracks.forEach((track) => track.stop());
-      setIsCameraActive(false);
     }
   };
 
@@ -133,17 +101,40 @@ const CameraCapture: React.FC = () => {
     setIsFacingUser((prev) => !prev);
   };
 
+  const getGuideImage = () => {
+    if (!location.state) return null;
+    const { from } = location.state;
+
+    if (from === '/detail-oral-check/front-photo') {
+      return FrontGuideImage;
+    } else if (from === '/detail-oral-check/upper-photo') {
+      return UpperGuideImage;
+    } else if (from === '/detail-oral-check/lower-photo') {
+      return LowerGuideImage;
+    } else if (from === '/oral-check/photo') {
+      return null;
+    }
+  };
+
+  const guideImageSrc = getGuideImage();
+
+  const handleCancel = () => {
+    if (location.state && location.state.from) {
+      navigate(-1);
+    } else {
+      navigate('/');
+    }
+  };
+
   return (
     <Container>
       <VideoContainer>
         <Video ref={videoRef} autoPlay playsInline />
         <Canvas ref={canvasRef} />
-        <GuideImage src={LipGuideImage} alt="Lip guide" />
+        {guideImageSrc && <GuideImage src={guideImageSrc} alt="Camera guide" />}
       </VideoContainer>
       <ButtonContainer>
-        <ActionButton onClick={() => navigate('/oral-check/photo')}>
-          취소
-        </ActionButton>
+        <ActionButton onClick={handleCancel}>취소</ActionButton>
         <CaptureButton onClick={capturePhoto} />
         <ActionButton onClick={toggleCameraFacing}>전환</ActionButton>
       </ButtonContainer>
@@ -174,7 +165,7 @@ const GuideImage = styled.img`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 150px;
+  width: 300px;
   height: auto;
   opacity: 0.7;
   pointer-events: none;
