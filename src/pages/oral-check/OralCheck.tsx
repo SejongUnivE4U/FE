@@ -17,7 +17,7 @@ export default function OralCheck() {
       </Description>
       <Image src={OralCheckImage} alt="구강 검사 이미지" />
       <ButtonContainer>
-        <GuideButton onClick={() => alert('검사 가이드')}>
+        <GuideButton onClick={() => navigate('/oral-check/guide')}>
           검사 가이드
         </GuideButton>
         <StartButton onClick={() => navigate('/oral-check/type')}>

@@ -1,16 +1,20 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import LipGuideImage from '../../../../public/assets/icons/lip-guide.svg';
+import boltSlashIcon from '../../../../public/assets/icons/bolt-slash.svg';
+import boltIcon from '../../../../public/assets/icons/bolt.svg';
+import FrontGuideImage from '../../../../public/assets/images/camera-guide-front.svg';
+import LowerGuideImage from '../../../../public/assets/images/camera-guide-lower.svg';
+import UpperGuideImage from '../../../../public/assets/images/camera-guide-upper.svg';
 
 const CameraCapture: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [isCameraActive, setIsCameraActive] = useState(false);
   const [isFacingUser, setIsFacingUser] = useState(false);
+  const [isFlashActive, setIsFlashActive] = useState(false);
+  const [isFlashing, setIsFlashing] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(isCameraActive); //임시
 
   useEffect(() => {
     startCamera();
@@ -24,14 +28,13 @@ const CameraCapture: React.FC = () => {
       });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        setIsCameraActive(true);
       }
     } catch (err) {
       console.error('Error accessing camera:', err);
     }
   };
 
-  const capturePhoto = () => {
+  const capturePhoto = async () => {
     if (videoRef.current && canvasRef.current) {
       const context = canvasRef.current.getContext('2d');
       const video = videoRef.current;
@@ -41,6 +44,10 @@ const CameraCapture: React.FC = () => {
       canvas.height = video.videoHeight;
 
       if (context) {
+        if (isFlashActive) {
+          await triggerFlash();
+        }
+
         context.drawImage(
           videoRef.current,
           0,
@@ -85,36 +92,6 @@ const CameraCapture: React.FC = () => {
             stopCamera();
           }
         }, 'image/png');
-
-        // const imageDataUrl = canvasRef.current.toDataURL('image/png');
-        // console.log(location.state);
-        // if (location.state && location.state.from === '/oral-check/photo') {
-        //   navigate('/oral-check/photo-preview', {
-        //     state: { image: imageDataUrl },
-        //   });
-        // } else if (
-        //   location.state &&
-        //   location.state.from === '/detail-oral-check/front-photo'
-        // ) {
-        //   navigate('/detail-oral-check/front-preview', {
-        //     state: { image: imageDataUrl },
-        //   });
-        // } else if (
-        //   location.state &&
-        //   location.state.from === '/detail-oral-check/upper-photo'
-        // ) {
-        //   navigate('/detail-oral-check/upper-preview', {
-        //     state: { image: imageDataUrl },
-        //   });
-        // } else if (
-        //   location.state &&
-        //   location.state.from === '/detail-oral-check/lower-photo'
-        // ) {
-        //   navigate('/detail-oral-check/lower-preview', {
-        //     state: { image: imageDataUrl },
-        //   });
-        // }
-
         stopCamera();
       }
     }
@@ -125,7 +102,6 @@ const CameraCapture: React.FC = () => {
       const stream = videoRef.current.srcObject as MediaStream;
       const tracks = stream.getTracks();
       tracks.forEach((track) => track.stop());
-      setIsCameraActive(false);
     }
   };
 
@@ -133,17 +109,58 @@ const CameraCapture: React.FC = () => {
     setIsFacingUser((prev) => !prev);
   };
 
+  const toggleFlash = () => {
+    setIsFlashActive((prev) => !prev);
+  };
+
+  const triggerFlash = async () => {
+    setIsFlashing(true);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    setIsFlashing(false);
+  };
+
+  const getGuideImage = () => {
+    if (!location.state) return null;
+    const { from } = location.state;
+
+    if (from === '/detail-oral-check/front-photo') {
+      return FrontGuideImage;
+    } else if (from === '/detail-oral-check/upper-photo') {
+      return UpperGuideImage;
+    } else if (from === '/detail-oral-check/lower-photo') {
+      return LowerGuideImage;
+    } else if (from === '/oral-check/photo') {
+      return null;
+    }
+  };
+
+  const guideImageSrc = getGuideImage();
+
+  const handleCancel = () => {
+    if (location.state && location.state.from) {
+      navigate(-1);
+    } else {
+      navigate('/');
+    }
+  };
+
   return (
     <Container>
+      <FlashWrapper>
+        <FlashIcon
+          src={isFlashActive ? boltIcon : boltSlashIcon}
+          alt="Flash Toggle"
+          onClick={toggleFlash}
+        />
+      </FlashWrapper>
       <VideoContainer>
         <Video ref={videoRef} autoPlay playsInline />
         <Canvas ref={canvasRef} />
-        <GuideImage src={LipGuideImage} alt="Lip guide" />
+        {guideImageSrc && <GuideImage src={guideImageSrc} alt="Camera guide" />}
+        {isFlashing && <FlashEffect />}
       </VideoContainer>
       <ButtonContainer>
-        <ActionButton onClick={() => navigate('/oral-check/photo')}>
-          취소
-        </ActionButton>
+        <ActionButton onClick={handleCancel}>취소</ActionButton>
         <CaptureButton onClick={capturePhoto} />
         <ActionButton onClick={toggleCameraFacing}>전환</ActionButton>
       </ButtonContainer>
@@ -156,9 +173,21 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  justify-content: space-between;
   background-color: black;
-  padding-top: 150px; /* 상단 여백 */
+`;
+
+const FlashWrapper = styled.div`
+  width: 100%;
+  height: 125px;
+  display: flex;
+  align-items: center;
+`;
+
+const FlashIcon = styled.img`
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  margin-left: 20px;
 `;
 
 const VideoContainer = styled.div`
@@ -166,7 +195,6 @@ const VideoContainer = styled.div`
   width: 100%;
   height: auto;
   flex: 1;
-  margin-bottom: 20px; /* 하단 여백 */
 `;
 
 const GuideImage = styled.img`
@@ -174,7 +202,7 @@ const GuideImage = styled.img`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 150px;
+  width: 300px;
   height: auto;
   opacity: 0.7;
   pointer-events: none;
@@ -195,29 +223,50 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 30px;
+  padding: 0 20px;
   position: relative;
   width: 100%;
-  height: 150px;
+  height: 185px;
   margin-top: auto;
 `;
 const ActionButton = styled.button`
   background: none;
   border: none;
   color: white;
-  font-size: 16px;
+  font-size: 18px;
   cursor: pointer;
 `;
 
 const CaptureButton = styled.button`
-  width: 60px;
-  height: 60px;
+  width: 75px;
+  height: 75px;
   background-color: white;
   border: 4px solid rgba(255, 255, 255, 0.6);
   border-radius: 50%;
+  position: relative;
   cursor: pointer;
-  display: block;
-  margin: 0 auto;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 63px;
+    height: 63px;
+    border: 2.5px solid black;
+    border-radius: 50%;
+    background-color: transparent;
+  }
+`;
+
+const FlashEffect = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
 `;
 
 export default CameraCapture;

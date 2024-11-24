@@ -12,9 +12,11 @@ import UpperPhoto from './pages/detail-oral-check/photo/UpperPhoto';
 import Home from './pages/home/Home';
 import Landing from './pages/landing/Landing';
 import Login from './pages/login/Login';
+import DentalMap from './pages/map/DentalMap';
 import OralCheck from './pages/oral-check/OralCheck';
 import AdditionalCheck from './pages/oral-check/aditional-check/AditionalCheck';
 import CameraCapture from './pages/oral-check/camera-capture/CameraCapture';
+import OralCheckGuide from './pages/oral-check/guide/OralCheckGuide';
 import PhotoPreview from './pages/oral-check/photo-preview/PhotoPreview';
 import OralCheckPhoto from './pages/oral-check/photo/OralCheckPhoto';
 import OralCheckType from './pages/oral-check/type/OralCheckType';
@@ -39,10 +41,12 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
 
             <Route path="/home" element={<Home />} />
+            <Route path="/map" element={<DentalMap />} />
 
             <Route path="/account-setting" element={<AccountSetting />} />
 
             <Route path="/oral-check" element={<OralCheck />} />
+            <Route path="/oral-check/guide" element={<OralCheckGuide />} />
             <Route path="/oral-check/type" element={<OralCheckType />} />
             <Route path="/oral-check/photo" element={<OralCheckPhoto />} />
             <Route

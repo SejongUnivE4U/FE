@@ -1,94 +1,46 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 import styled from 'styled-components';
+import { logoutUser } from '../../api/userApis';
 import Button from '../../components/Button';
+import Modal from '../../components/Modal';
 
 export default function AccountSetting() {
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmNewPassword, setConfirmNewPassword] = useState('');
-  const [passwordError, setPasswordError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLogoutModalOpen, setLogoutModalOpen] = useState(false);
+  const navigate = useNavigate();
 
-  const handlePasswordConfirmation = (value: string) => {
-    setConfirmNewPassword(value);
-    if (newPassword !== value) {
-      setPasswordError('비밀번호가 일치하지 않습니다.');
-    } else {
-      setPasswordError(null);
-    }
-  };
-
-  const isButtonEnabled = newPassword && confirmNewPassword && !passwordError;
-
-  // 비밀번호 변경 요청
-  const handleChangePassword = async (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!isButtonEnabled) return;
-
-    setIsLoading(true);
+  const handleLogout = async () => {
     try {
-      // await changePassword(newPassword);
-      // alert('비밀번호가 성공적으로 변경되었습니다.');
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmNewPassword('');
+      await logoutUser();
+      Cookies.remove('refreshToken');
+      navigate('/');
     } catch (error) {
-      alert('비밀번호 변경 중 오류가 발생했습니다. 다시 시도해주세요.');
-    } finally {
-      setIsLoading(false);
+      console.error('Logout failed:', error);
     }
   };
 
   return (
     <Container>
       <Title>계정 설정</Title>
-
-      <Form>
-        <SectionTitle>비밀번호 변경</SectionTitle>
-        <InputWrapper>
-          <Input
-            type="password"
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-            placeholder="기존 비밀번호"
-          />
-        </InputWrapper>
-        <InputWrapper>
-          <Input
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="새 비밀번호"
-          />
-        </InputWrapper>
-        <InputWrapper>
-          <Input
-            type="password"
-            value={confirmNewPassword}
-            onChange={(e) => handlePasswordConfirmation(e.target.value)}
-            placeholder="새 비밀번호 확인"
-          />
-          {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
-        </InputWrapper>
-        <ChangePasswordButtonWrapper>
-          <ChangePasswordButton
-            onClick={handleChangePassword}
-            disabled={!isButtonEnabled}
-          >
-            {isLoading ? '변경 중...' : '변경하기'}
-          </ChangePasswordButton>
-        </ChangePasswordButtonWrapper>
-
+      <ButtonWrapper>
         <LogoutButtonWrapper>
-          <Button variant="outline" onClick={() => alert('로그아웃')}>
+          <Button variant="outline" onClick={() => setLogoutModalOpen(true)}>
             로그아웃
           </Button>
         </LogoutButtonWrapper>
-
         <Button variant="secondary" onClick={() => alert('계정 탈퇴')}>
           계정 탈퇴
         </Button>
-      </Form>
+      </ButtonWrapper>
+      <Modal
+        isOpen={isLogoutModalOpen}
+        title="정말 로그아웃 하시겠습니까?"
+        onClose={() => setLogoutModalOpen(false)}
+        buttonText="확인"
+        onConfirm={handleLogout}
+        additionalMessage="로그아웃 후 다시 로그인해야 합니다."
+      />
     </Container>
   );
 }
@@ -99,7 +51,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   padding: 0 auto;
-  margin-top: calc(8vh);
+  margin-top: calc(20vh);
   margin-bottom: 130px;
 `;
 
@@ -113,85 +65,12 @@ const Title = styled.h1`
   margin-bottom: 50px;
 `;
 
-const Form = styled.form`
+const ButtonWrapper = styled.div`
   display: flex;
   flex-direction: column;
-`;
-
-const SectionTitle = styled.h2`
-  font-family: Pretendard;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 24px;
-  color: ${({ theme }) => theme.colors.textPrimary};
-  margin-bottom: 10px;
-`;
-
-const InputWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 8px;
-`;
-
-const Input = styled.input`
-  width: 335px;
-  height: 45px;
-  padding: 14px 20px;
-  color: ${({ theme }) => theme.colors.textPrimary};
-  border-radius: 10px;
-  background: #f7f7fa;
-  border: 1px solid transparent;
-
-  &::placeholder {
-    color: #8f95b2;
-  }
-`;
-
-const ChangePasswordButtonWrapper = styled.div`
-  margin-top: 16px;
-  margin-bottom: 58px;
-  display: flex;
-  justify-content: right;
-`;
-
-const ChangePasswordButton = styled.button`
-  display: flex;
-  width: 90px;
-  height: 40px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-  border: none;
-  border-radius: 10px;
-  text-align: center;
-  font-family: Pretendard;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 24px;
-  background-color: ${({ theme }) => theme.colors.primaryGreen};
-  background-color: ${({ theme, disabled }) =>
-    disabled ? '#C6CADA' : theme.colors.primaryGreen};
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-  color: ${({ theme }) => theme.colors.textWhite};
-  border: none;
-  &:active {
-    background-color: ${({ disabled }) => (disabled ? '#C6CADA' : '#32a68a')};
-  }
 `;
 
 const LogoutButtonWrapper = styled.div`
-  margin-bottom: 24px;
-`;
-
-const ErrorMessage = styled.span`
-  color: #d14343;
-  font-family: Pretendard;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 18px;
+  margin-top: 70px;
+  margin-bottom: 70px;
 `;
