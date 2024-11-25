@@ -6,6 +6,12 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      strategies: 'injectManifest', // InjectManifest 전략 사용
+      srcDir: 'src', // 서비스 워커 파일 위치
+      filename: 'service-worker.js', // 생성될 서비스 워커 파일 이름
+      injectManifest: {
+        swSrc: './src/service-worker.js', // 커스텀 서비스 워커 파일 경로
+      },
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
@@ -39,20 +45,20 @@ export default defineConfig({
           },
         ],
       },
-      workbox: {
-        runtimeCaching: [
-          {
-            urlPattern: ({ url }: { url: URL }) =>
-              url.href.startsWith('https://e4u.kro.kr/'),
-            handler: 'NetworkFirst',
-            options: {
-              fetchOptions: {
-                credentials: 'include',
-              },
-            },
-          },
-        ],
-      },
+      // workbox: {
+      //   runtimeCaching: [
+      //     {
+      //       urlPattern: ({ url }: { url: URL }) =>
+      //         url.href.startsWith('https://e4u.kro.kr/'),
+      //       handler: 'NetworkFirst',
+      //       options: {
+      //         fetchOptions: {
+      //           credentials: 'include',
+      //         },
+      //       },
+      //     },
+      //   ],
+      // },
     }),
   ],
   server: {
