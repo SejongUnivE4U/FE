@@ -56,7 +56,7 @@ export default function UpperPhotoPreview() {
               {!isPhotoValid && (
                 <ReSelectButtonWrapper>
                   <ReSelectButton
-                    onClick={() => navigate('/detail-oral-check/front-photo')}
+                    onClick={() => navigate('/detail-oral-check/upper-photo')}
                   >
                     재선택 하기
                   </ReSelectButton>

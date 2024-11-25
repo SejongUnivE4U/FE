@@ -4,6 +4,7 @@ import { uploadImage } from '../api/reportApis';
 interface PhotoValidationResult {
   isPhotoValid: boolean | null;
   isLoading: boolean;
+  error?: string;
 }
 
 export const usePhotoValidation = (
@@ -11,29 +12,39 @@ export const usePhotoValidation = (
 ): PhotoValidationResult => {
   const [isPhotoValid, setIsPhotoValid] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     const validatePhoto = async () => {
       if (!image) {
         setIsPhotoValid(false);
         setIsLoading(false);
+        setError('No image provided');
         return;
       }
 
       setIsLoading(true);
+      setError(undefined);
       try {
         const result = await uploadImage(image);
         if (result?.message === 'All images are valid oral images') {
           setIsPhotoValid(true);
         } else {
           setIsPhotoValid(false);
+          setError('Invalid oral image');
         }
       } catch (error: any) {
         console.error('Error validating photo:', error);
-        if (error.response?.data?.errorCode === 'INVALID_IMAGE_TYPE') {
+        setError(error);
+        if (error.response?.data?.message) {
+          // 정확한 에러 메시지를 `setError`에 저장
+          setError(error);
+        } else if (error.response?.data?.errorCode === 'INVALID_IMAGE_TYPE') {
           setIsPhotoValid(false);
+          setError(error);
         } else {
           console.error('Unexpected error:', error);
+          setError(error);
         }
       } finally {
         setIsLoading(false);
@@ -48,5 +59,5 @@ export const usePhotoValidation = (
     }
   }, [image]);
 
-  return { isPhotoValid, isLoading };
+  return { isPhotoValid, isLoading, error };
 };
