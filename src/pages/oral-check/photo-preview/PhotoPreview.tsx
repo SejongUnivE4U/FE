@@ -9,7 +9,10 @@ export default function PhotoPreview() {
   const navigate = useNavigate();
   const location = useLocation();
   const { image } = location.state || { image: null };
-  const { isPhotoValid, isLoading } = usePhotoValidation(image as File | null);
+  // const { isPhotoValid, isLoading } = usePhotoValidation(image as File | null);
+  const { isPhotoValid, isLoading, error }: any = usePhotoValidation(
+    image as File | null,
+  );
 
   return (
     <Container>
@@ -35,9 +38,7 @@ export default function PhotoPreview() {
             </NoticeWrapper>
             {!isPhotoValid && (
               <ReSelectButtonWrapper>
-                <ReSelectButton
-                  onClick={() => navigate('/detail-oral-check/front-photo')}
-                >
+                <ReSelectButton onClick={() => navigate('/oral-check/photo')}>
                   재선택 하기
                 </ReSelectButton>
               </ReSelectButtonWrapper>
@@ -56,6 +57,12 @@ export default function PhotoPreview() {
           <Notice>이미지가 없습니다. 다시 시도해 주세요.</Notice>
         )}
       </Contents>
+      {error && (
+        <DebugContainer>
+          <DebugTitle>디버깅 정보:</DebugTitle>
+          <DebugContent>{JSON.stringify(error, null, 2)}</DebugContent>
+        </DebugContainer>
+      )}
     </Container>
   );
 }
@@ -158,4 +165,26 @@ const ReSelectButton = styled.button`
 const LoadingMessage = styled.p`
   color: ${({ theme }) => theme.colors.textSecondary};
   margin-top: 100px;
+`;
+
+const DebugContainer = styled.div`
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  width: 90%;
+`;
+
+const DebugTitle = styled.h2`
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+`;
+
+const DebugContent = styled.pre`
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: pre-wrap;
 `;
