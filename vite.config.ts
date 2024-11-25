@@ -10,7 +10,8 @@ export default defineConfig({
       srcDir: 'src', // 서비스 워커 파일 위치
       filename: 'service-worker.js', // 생성될 서비스 워커 파일 이름
       injectManifest: {
-        swSrc: './src/service-worker.js', // 커스텀 서비스 워커 파일 경로
+        swSrc: './src/service-worker.js', // 소스 서비스 워커
+        swDest: 'dist/service-worker.js', // 빌드 후 출력 위치
       },
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
