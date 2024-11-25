@@ -39,6 +39,20 @@ export default defineConfig({
           },
         ],
       },
+      workbox: {
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }: { url: URL }) =>
+              url.href.startsWith('https://e4u.kro.kr/'),
+            handler: 'NetworkFirst',
+            options: {
+              fetchOptions: {
+                credentials: 'include',
+              },
+            },
+          },
+        ],
+      },
     }),
   ],
   server: {
