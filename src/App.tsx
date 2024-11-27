@@ -107,7 +107,7 @@ function App() {
                 element={<LowerPhotoPreview />}
               />
 
-              <Route path="/report" element={<Report />} />
+              <Route path="/report/:reportId" element={<Report />} />
               <Route path="/report-list" element={<ReportList />} />
             </Route>
           </Routes>

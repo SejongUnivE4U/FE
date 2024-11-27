@@ -15,3 +15,13 @@ export const uploadImage = async (file: File) => {
     throw error;
   }
 };
+
+export const fetchDiagnosisReport = async (reportId: number) => {
+  try {
+    const response = await instance.get(`/diagnosis/user/${reportId}`);
+    return response.data;
+  } catch (error) {
+    console.error('리포트 데이터 가져오기 실패:', error);
+    throw error;
+  }
+};
