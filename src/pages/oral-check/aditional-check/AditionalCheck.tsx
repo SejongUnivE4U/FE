@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { submitSymptom } from '../../../api/reportApis';
 import BackButton from '../../../components/BackButton';
 import Button from '../../../components/Button';
-import { oralImagesAtom } from '../../../state/atoms';
 import GumSelector from './GumSelector';
 import OptionDropdown from './OptionDropdown';
 import OtherSelector from './OtherSelector';
@@ -11,9 +11,7 @@ import PainInput from './PainInput';
 import ToothSelector from './ToothSelector';
 
 export default function AdditionalCheck() {
-  const oralImages = useAtomValue(oralImagesAtom);
-  const setOralImages = useSetAtom(oralImagesAtom);
-
+  const navigate = useNavigate();
   const options = ['치아', '잇몸', '기타'];
   const [selectedOption, setSelectedOption] = useState('치아');
   const [painLevel, setPainLevel] = useState(0);
@@ -21,6 +19,7 @@ export default function AdditionalCheck() {
   const [selectedTeeth, setSelectedTeeth] = useState<number[]>([]);
   const [selectedGums, setSelectedGums] = useState<string[]>([]);
   const [selectedParts, setSelectedParts] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setSelectedTeeth([]);
@@ -38,19 +37,41 @@ export default function AdditionalCheck() {
     setSelectedParts(parts);
   };
 
-  //임시 검사 로직
-  const handleComplete = () => {
-    const requestData = {
-      painLevel,
-      symptom,
-      selectedTeeth,
-      selectedGums,
-      selectedParts,
-      oralImages,
-    };
-    console.log('검사 요청 데이터:', requestData);
-    setOralImages([]);
-    console.log('oralImages 초기화 완료');
+  // //임시 검사 로직
+  // const handleComplete = () => {
+  //   const requestData = {
+  //     painLevel,
+  //     symptom,
+  //     selectedTeeth,
+  //     selectedGums,
+  //     selectedParts,
+  //   };
+  //   console.log('검사 요청 데이터:', requestData);
+  //   console.log('oralImages 초기화 완료');
+  // };
+
+  const handleComplete = async () => {
+    try {
+      setLoading(true);
+      // 데이터 준비
+      const symptomArea = [
+        ...selectedTeeth.map(String),
+        ...selectedGums,
+        ...selectedParts,
+      ];
+
+      // API 요청
+      const response = await submitSymptom(painLevel, [symptom], symptomArea);
+
+      // 결과 출력
+      console.log('증상 제출 성공:', response);
+
+      // 결과로 받은 diagnosisId로 이동
+      const diagnosisId = response.diagnosisId;
+      navigate(`/report/${diagnosisId}`);
+    } catch (error) {
+      console.error('증상 제출 실패:', error);
+    }
   };
 
   const handleSkip = () => {
@@ -81,6 +102,12 @@ export default function AdditionalCheck() {
         return null;
     }
   };
+
+  if (loading) {
+    return (
+      <LoadingText>결과를 처리 중입니다. 잠시만 기다려 주세요...</LoadingText>
+    );
+  }
 
   return (
     <PageContainer>
@@ -158,4 +185,11 @@ const ButtonContainer = styled.div`
   gap: 24px;
   width: 100%;
   align-items: center;
+`;
+
+const LoadingText = styled.div`
+  text-align: center;
+  margin-top: 50px;
+  font-size: 18px;
+  color: #666;
 `;

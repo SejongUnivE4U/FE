@@ -24,21 +24,6 @@ const Report = () => {
 
   const [loading, setLoading] = useState(true);
 
-  // const [reportData, setReportData] = useState({
-  //   name: '이포유',
-  //   score: 25,
-  //   status: '',
-  //   analysisResult:
-  //     '구강 분석 결과 47,48번 치아에 충치가 있는 것으로 보입니다! 또한 42번 치아의 경우 충치가 의심되므로 치과를 방문하여 진료를 받는 것을 권장드립니다. 구강 관리 습관을 개선하여 구강 건강을 향상 시키도록 해야해요',
-  //   detailedResult:
-  //     '말씀하신 어금니가 욱씬거리는 증상은 충치일 가능성이 높습니다. 충치가 발생하는 이유로는 음식물 섭취 이후 제대로 된 양치질을 하지 않아 세균이 배출한 배설물로 인하여 치아가 부식되고 치아의 유기질이 용해되기 때문입니다. 구강 분석 결과 47,48번 치아에 충치가 있는 것으로 보입니다! 또한 42번 치아의 경우 충치가 의심되므로 치과를 방문하여 진료를 받는 것을 권장드립니다. 구강 관리 습관을 개선하여 구강 건강을 향상 시키도록 해야해요',
-  //   treatmentMethods: ['복합 레진', '크라운'],
-  //   managementMethods: [
-  //     '이포유 님은 작은 치아를 가지고 있습니다. 작은 치아의 경우 구강 관리와 소형 치간 칫솔을 사용해...',
-  //     '관리 팁: 작은 치아는 칫솔이 잘 닿지 않는 부분이 많으므로 작은 칫솔을 사용해 치아의 모든 면을 꼼꼼히 닦아주세요.',
-  //   ],
-  // });
-
   useEffect(() => {
     const determineStatus = (score: number) => {
       if (score <= 20) return '매우 위험';
@@ -85,7 +70,7 @@ const Report = () => {
   return (
     <PageContainer>
       <TopBar>
-        <CloseButton to="/home" />
+        <CloseButton to="/report-list" />
       </TopBar>
       <Contents>
         <Title>구강 검사 보고서</Title>
@@ -102,13 +87,13 @@ const Report = () => {
             </ScoreText>
           </ScoreSection>
           <ImageSection>
-            <AnalysisImage
-              src={
-                reportData.analyzedImageUrls[0] ||
-                'https://via.placeholder.com/300'
-              }
-              alt="분석 이미지"
-            />
+            {reportData.analyzedImageUrls.map((url, index) => (
+              <AnalysisImage
+                key={index}
+                src={url}
+                alt={`분석 이미지 ${index + 1}`}
+              />
+            ))}
           </ImageSection>
           <Section>
             <SectionTitle>분석 결과</SectionTitle>
@@ -118,18 +103,6 @@ const Report = () => {
             <SectionTitle>세부 분석</SectionTitle>
             <SectionContent>{reportData.detailedResult}</SectionContent>
           </Section>
-          {/* <Section>
-            <SectionTitle>치료 방법</SectionTitle>
-            {reportData.treatmentMethods.map((method, index) => (
-              <ListItem
-                key={index}
-                onClick={() => console.log(`${method} 클릭됨`)}
-              >
-                <span>{method}</span>
-                <Icon src={ArrowIcon} alt="화살표 아이콘" />
-              </ListItem>
-            ))}
-          </Section> */}
           <Section>
             <SectionTitle>관리 방법</SectionTitle>
             <SectionContent>{reportData.careMethod}</SectionContent>

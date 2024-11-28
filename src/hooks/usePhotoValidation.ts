@@ -27,6 +27,7 @@ export const usePhotoValidation = (
       setError(undefined);
       try {
         const result = await uploadImage(image);
+        console.log(result);
         if (result?.message === 'All images are valid oral images') {
           setIsPhotoValid(true);
         } else {

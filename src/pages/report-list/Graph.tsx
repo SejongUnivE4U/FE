@@ -12,6 +12,15 @@ interface GraphProps {
 
 const Graph: React.FC<GraphProps> = ({ data }) => {
   const maxScore = 100;
+
+  if (data.length === 0) {
+    return (
+      <GraphWrapper>
+        <NoDataMessage>아직 리포트 데이터가 없습니다.</NoDataMessage>
+      </GraphWrapper>
+    );
+  }
+
   const displayedData = data.slice(-20);
 
   return (
@@ -83,6 +92,14 @@ const Message = styled.p`
   color: #8f95b2;
   text-align: center;
   margin-top: 10px;
+`;
+
+const NoDataMessage = styled.p`
+  font-family: Pretendard;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+  margin-top: 20px;
 `;
 
 export default Graph;

@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { fetchAllDiagnosisReports } from '../../api/reportApis';
 import Carousel from '../../components/Carousel';
 import Graph from './Graph';
 import LowerTeethWithIssues from './LowerTeethWithIssues';
@@ -6,31 +8,43 @@ import ReportCard from './ReportCard';
 import UpperTeethWithIssues from './UpperTeethWithIssues';
 
 export default function ReportList() {
-  const data = [
-    { diagnosisId: 1, reportScore: 30 },
-    { diagnosisId: 2, reportScore: 20 },
-    { diagnosisId: 3, reportScore: 60 },
-    { diagnosisId: 4, reportScore: 20 },
-    { diagnosisId: 5, reportScore: 50 },
-    { diagnosisId: 6, reportScore: 90 },
-    { diagnosisId: 7, reportScore: 30 },
-    { diagnosisId: 8, reportScore: 20 },
-    { diagnosisId: 9, reportScore: 60 },
-    { diagnosisId: 10, reportScore: 20 },
-  ];
+  const [reportData, setReportData] = useState<any[]>([]); // API 데이터를 저장
+  const [loading, setLoading] = useState(true); // 로딩 상태
+  const problemTeeth = [11, 12, 13, 25, 28, 35, 37, 52];
 
-  // const [problemTeeth, setProblemTeeth] = useState<number[]>([
-  //   // 11, 12, 13, 14, 15, 16, 17, 18, 21, 22, 23, 24, 25, 26, 27, 28, 31, 32, 33,
-  //   // 34, 35, 36, 37, 38, 41, 42, 43, 44, 45, 46, 47, 48,
-  //   11,
-  //   12, 13, 25, 28, 35, 37, 52,
-  // ]);
-  const problemTeeth = [
-    // 11, 12, 13, 14, 15, 16, 17, 18, 21, 22, 23, 24, 25, 26, 27, 28, 31, 32, 33,
-    // 34, 35, 36, 37, 38, 41, 42, 43, 44, 45, 46, 47, 48,
-    11,
-    12, 13, 25, 28, 35, 37, 52,
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const apiData = await fetchAllDiagnosisReports();
+
+        // 데이터를 최신순으로 유지하되, diagnosisId는 오래된 데이터부터 0으로 설정
+        const mappedData = apiData.map(
+          (item: any, index: number, arr: any[]) => ({
+            diagnosisId: arr.length - 1 - index, // 오래된 데이터가 0부터 증가
+            idx: index, // 화면 상에서는 최신 데이터가 위로
+            images: {
+              '1': item.analyzedImageUrls[0] || '', // 첫 번째 이미지만 사용
+            },
+            diagnoseDate: item.diagnoseDate,
+            reportScore: item.dangerPoint,
+            diagnoseCondition: '', // 빈 값
+          }),
+        );
+
+        setReportData(mappedData);
+      } catch (error) {
+        console.error('리포트 데이터를 불러오는 중 오류 발생:', error);
+      } finally {
+        setLoading(false); // 로딩 완료
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <LoadingText>데이터를 불러오는 중입니다...</LoadingText>;
+  }
 
   return (
     <Container>
@@ -41,7 +55,7 @@ export default function ReportList() {
         </TitleWrapper>
         <Carousel>
           <div>
-            <Graph data={data} />
+            <Graph data={reportData} />
           </div>
           <div>
             <LowerTeethWithIssues problemTeeth={problemTeeth} />
@@ -53,46 +67,20 @@ export default function ReportList() {
         <ReportTitleWrapper>
           <ReportTitle>전체 보고서</ReportTitle>
         </ReportTitleWrapper>
-        <ReportCard
-          diagnosisId={1}
-          images={{
-            '1': 'https://i.pinimg.com/736x/ae/87/22/ae87226f90a278003f901a61955eea0f.jpg',
-            '2': 'https://i.pinimg.com/736x/1d/59/02/1d5902a3c97b4638fe06dc2243ed6b9e.jpg',
-          }}
-          diagnoseDate="2024-10-26T08:31:28.000+00:00"
-          reportScore={10}
-          diagnoseCondition="충치,치주염"
-        />
-        <ReportCard
-          diagnosisId={1}
-          images={{
-            '1': 'https://i.pinimg.com/736x/ae/87/22/ae87226f90a278003f901a61955eea0f.jpg',
-            '2': 'https://i.pinimg.com/736x/1d/59/02/1d5902a3c97b4638fe06dc2243ed6b9e.jpg',
-          }}
-          diagnoseDate="2024-10-26T08:31:28.000+00:00"
-          reportScore={30}
-          diagnoseCondition="충치,치주염"
-        />
-        <ReportCard
-          diagnosisId={1}
-          images={{
-            '1': 'https://i.pinimg.com/736x/ae/87/22/ae87226f90a278003f901a61955eea0f.jpg',
-            '2': 'https://i.pinimg.com/736x/1d/59/02/1d5902a3c97b4638fe06dc2243ed6b9e.jpg',
-          }}
-          diagnoseDate="2024-10-26T08:31:28.000+00:00"
-          reportScore={60}
-          diagnoseCondition="충치,치주염"
-        />
-        <ReportCard
-          diagnosisId={1}
-          images={{
-            '1': 'https://i.pinimg.com/736x/ae/87/22/ae87226f90a278003f901a61955eea0f.jpg',
-            '2': 'https://i.pinimg.com/736x/1d/59/02/1d5902a3c97b4638fe06dc2243ed6b9e.jpg',
-          }}
-          diagnoseDate="2024-10-26T08:31:28.000+00:00"
-          reportScore={80}
-          diagnoseCondition="충치,치주염"
-        />
+        {reportData.length === 0 ? (
+          <NoReportText>아직 리포트 데이터가 없습니다.</NoReportText>
+        ) : (
+          reportData.map((report) => (
+            <ReportCard
+              key={report.diagnosisId}
+              diagnosisId={report.diagnosisId}
+              images={report.images}
+              diagnoseDate={report.diagnoseDate}
+              reportScore={report.reportScore}
+              diagnoseCondition={report.diagnoseCondition}
+            />
+          ))
+        )}
       </Contents>
     </Container>
   );
@@ -154,4 +142,18 @@ const ReportTitle = styled.p`
   font-style: normal;
   font-weight: 700;
   line-height: 22px;
+`;
+
+const LoadingText = styled.div`
+  text-align: center;
+  margin-top: 50px;
+  font-size: 18px;
+  color: #666;
+`;
+
+const NoReportText = styled.div`
+  text-align: center;
+  margin-top: 50px;
+  font-size: 18px;
+  color: #999;
 `;
