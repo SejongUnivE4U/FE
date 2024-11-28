@@ -46,20 +46,24 @@ export default defineConfig({
           },
         ],
       },
-      // workbox: {
-      //   runtimeCaching: [
-      //     {
-      //       urlPattern: ({ url }: { url: URL }) =>
-      //         url.href.startsWith('https://e4u.kro.kr/'),
-      //       handler: 'NetworkFirst',
-      //       options: {
-      //         fetchOptions: {
-      //           credentials: 'include',
-      //         },
-      //       },
-      //     },
-      //   ],
-      // },
+      workbox: {
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }: { url: URL }) =>
+              url.origin === 'https://e4u-dev.netlify.app',
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'api-cache', // 캐시 이름
+              fetchOptions: {
+                credentials: 'include', // 쿠키 포함
+              },
+              matchOptions: {
+                ignoreSearch: true, // 쿼리 스트링 무시
+              },
+            },
+          },
+        ],
+      },
     }),
   ],
   server: {

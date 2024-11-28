@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface ReportCardProps {
@@ -10,11 +11,13 @@ interface ReportCardProps {
 }
 
 const ReportCard: React.FC<ReportCardProps> = ({
+  diagnosisId,
   images,
   diagnoseDate,
   reportScore,
   diagnoseCondition,
 }) => {
+  const navigate = useNavigate();
   const imageSrc = Object.values(images)[0];
 
   const formattedDate = new Date(diagnoseDate).toLocaleDateString('ko-KR', {
@@ -32,8 +35,12 @@ const ReportCard: React.FC<ReportCardProps> = ({
 
   const { status, color } = determineStatus(reportScore);
 
+  const handleClick = () => {
+    navigate(`/report/${diagnosisId}`);
+  };
+
   return (
-    <CardContainer>
+    <CardContainer onClick={handleClick}>
       <Image src={imageSrc} alt="진단 이미지" />
       <InfoContainer>
         <Condition>{diagnoseCondition}</Condition>

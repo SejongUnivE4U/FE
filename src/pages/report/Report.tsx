@@ -1,25 +1,28 @@
 import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import ArrowIcon from '../../../public/assets/icons/arrow-right-icon.svg';
+// import ArrowIcon from '../../../public/assets/icons/arrow-right-icon.svg';
+import { fetchDiagnosisReport } from '../../api/reportApis';
 import Button from '../../components/Button';
 import CloseButton from '../../components/CloseButton';
 import ScoreDonut from '../../components/ScoreDonut';
 
 const Report = () => {
-  const [reportData, setReportData] = useState({
-    name: '이포유',
-    score: 25,
-    status: '',
-    analysisResult:
-      '구강 분석 결과 47,48번 치아에 충치가 있는 것으로 보입니다! 또한 42번 치아의 경우 충치가 의심되므로 치과를 방문하여 진료를 받는 것을 권장드립니다. 구강 관리 습관을 개선하여 구강 건강을 향상 시키도록 해야해요',
-    detailedAnalysis:
-      '말씀하신 어금니가 욱씬거리는 증상은 충치일 가능성이 높습니다. 충치가 발생하는 이유로는 음식물 섭취 이후 제대로 된 양치질을 하지 않아 세균이 배출한 배설물로 인하여 치아가 부식되고 치아의 유기질이 용해되기 때문입니다. 구강 분석 결과 47,48번 치아에 충치가 있는 것으로 보입니다! 또한 42번 치아의 경우 충치가 의심되므로 치과를 방문하여 진료를 받는 것을 권장드립니다. 구강 관리 습관을 개선하여 구강 건강을 향상 시키도록 해야해요',
-    treatmentMethods: ['복합 레진', '크라운'],
-    managementMethods: [
-      '이포유 님은 작은 치아를 가지고 있습니다. 작은 치아의 경우 구강 관리와 소형 치간 칫솔을 사용해...',
-      '관리 팁: 작은 치아는 칫솔이 잘 닿지 않는 부분이 많으므로 작은 칫솔을 사용해 치아의 모든 면을 꼼꼼히 닦아주세요.',
-    ],
-  });
+  const navigate = useNavigate();
+  const { reportId } = useParams();
+
+  const [reportData, setReportData] = useState<{
+    userName: string;
+    dangerPoint: number;
+    status: string;
+    analyzedImageUrls: string[];
+    result: string;
+    detailedResult: string;
+    careMethod: string;
+    treatmentMethods: string[];
+  } | null>(null);
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const determineStatus = (score: number) => {
@@ -30,81 +33,89 @@ const Report = () => {
       return '매우 좋음';
     };
 
-    const newStatus = determineStatus(reportData.score);
-    setReportData((prevData) => ({
-      ...prevData,
-      status: newStatus,
-    }));
-  }, [reportData.score]);
+    const loadReportData = async () => {
+      try {
+        if (reportId) {
+          const data = await fetchDiagnosisReport(Number(reportId));
+          const mappedData = {
+            userName: data.userName,
+            dangerPoint: data.dangerPoint,
+            status: determineStatus(data.dangerPoint),
+            analyzedImageUrls: data.analyzedImageUrls,
+            result: data.result,
+            detailedResult: data.detailed_result,
+            careMethod: data.care_method,
+            treatmentMethods: ['복합 레진', '크라운'],
+          };
+          setReportData(mappedData);
+        }
+      } catch (error) {
+        console.error('리포트 데이터를 불러오는 중 오류 발생:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadReportData();
+  }, [reportId]);
+
+  if (loading) {
+    return <LoadingText>데이터를 불러오는 중...</LoadingText>;
+  }
+
+  if (!reportData) {
+    return <ErrorText>리포트 데이터를 찾을 수 없습니다.</ErrorText>;
+  }
 
   return (
     <PageContainer>
       <TopBar>
-        <CloseButton to="/home" />
+        <CloseButton to="/report-list" />
       </TopBar>
       <Contents>
         <Title>구강 검사 보고서</Title>
         <ReportContentsBox>
           <ScoreSection>
             <AnalysisText>
-              <NameHighlight>{reportData.name}</NameHighlight> 님의 분석 결과
+              <NameHighlight>{reportData.userName}</NameHighlight> 님의 분석
+              결과
             </AnalysisText>
-            <ScoreDonut score={reportData.score} />
+            <ScoreDonut score={reportData.dangerPoint} />
             <ScoreText>
-              {reportData.score}점으로{' '}
+              {reportData.dangerPoint}점으로{' '}
               <StatusHighlight>{reportData.status}</StatusHighlight> 상태입니다.
             </ScoreText>
           </ScoreSection>
           <ImageSection>
-            <AnalysisImage
-              src="https://i.pinimg.com/564x/76/a8/10/76a8109d4368748a07aa1dc9812b6f56.jpg"
-              alt="분석 이미지"
-            />
+            {reportData.analyzedImageUrls.map((url, index) => (
+              <AnalysisImage
+                key={index}
+                src={url}
+                alt={`분석 이미지 ${index + 1}`}
+              />
+            ))}
           </ImageSection>
           <Section>
             <SectionTitle>분석 결과</SectionTitle>
-            <SectionContent>{reportData.analysisResult}</SectionContent>
+            <SectionContent>{reportData.result}</SectionContent>
           </Section>
           <Section>
             <SectionTitle>세부 분석</SectionTitle>
-            <SectionContent>{reportData.detailedAnalysis}</SectionContent>
-          </Section>
-          <Section>
-            <SectionTitle>치료 방법</SectionTitle>
-            {reportData.treatmentMethods.map((method, index) => (
-              <ListItem
-                key={index}
-                onClick={() => console.log(`${method} 클릭됨`)}
-              >
-                <span>{method}</span>
-                <Icon src={ArrowIcon} alt="화살표 아이콘" />
-              </ListItem>
-            ))}
+            <SectionContent>{reportData.detailedResult}</SectionContent>
           </Section>
           <Section>
             <SectionTitle>관리 방법</SectionTitle>
-            {reportData.managementMethods.map((tip, index) => (
-              <SectionContent key={index}>{tip}</SectionContent>
-            ))}
+            <SectionContent>{reportData.careMethod}</SectionContent>
           </Section>
         </ReportContentsBox>
         <ButtonContainer>
-          <Button onClick={() => console.log('재검사')} variant="primary">
+          <Button onClick={() => navigate('/oral-check')} variant="outline">
             검사 다시하기
           </Button>
-          <Button onClick={() => console.log('젯봇 상담')} variant="outline">
-            젯봇 추가 상담
-          </Button>
-          <Button
-            onClick={() => console.log('주변 치과 확인')}
-            variant="primary"
-          >
+          <Button onClick={() => navigate('/map')} variant="primary">
             주변 치과 확인
           </Button>
-          <Button
-            onClick={() => console.log('보고서 목록')}
-            variant="secondary"
-          >
+          <Button onClick={() => navigate('/report-list')} variant="secondary">
             보고서 목록
           </Button>
         </ButtonContainer>
@@ -121,7 +132,7 @@ const PageContainer = styled.div`
   max-width: 400px;
   margin: 0 auto;
   padding: 20px 20px 60px;
-  margin-bottom: 200px;
+  margin-bottom: 30px;
 `;
 
 const TopBar = styled.div`
@@ -220,32 +231,33 @@ const SectionContent = styled.p`
   line-height: 1.5;
 `;
 
-const ListItem = styled.button`
-  width: 100%;
-  height: 58px;
-  font-family: Pretendard;
-  font-size: 14px;
-  color: #474d66;
-  padding: 10px 20px;
-  border-radius: 10px;
-  border: 1px solid #8f95b2;
-  margin-bottom: 14px;
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  transition: background-color 0.3s;
+// const ListItem = styled.button`
+//   width: 100%;
+//   height: 58px;
+//   font-family: Pretendard;
+//   font-size: 14px;
+//   color: #474d66;
+//   padding: 10px 20px;
+//   border-radius: 10px;
+//   border: 1px solid #8f95b2;
+//   margin-bottom: 14px;
+//   background: #fff;
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+//   cursor: pointer;
+//   transition: background-color 0.3s;
 
-  &:hover {
-    background-color: #f7f7fa;
-  }
-`;
+//   &:hover {
+//     background-color: #f7f7fa;
+//   }
+// `;
 
-const Icon = styled.img`
-  width: 16px;
-  height: auto;
-`;
+// const Icon = styled.img`
+//   width: 16px;
+//   height: auto;
+// `;
+
 const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -253,6 +265,24 @@ const ButtonContainer = styled.div`
   width: 100%;
   max-width: 335px;
   margin-top: 33px;
+`;
+
+const LoadingText = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 20px;
+  font-family: Pretendard;
+  font-weight: 600;
+  color: #c6cada;
+`;
+
+const ErrorText = styled.div`
+  text-align: center;
+  margin-top: 50px;
+  font-size: 18px;
+  color: #ff5e5e;
 `;
 
 export default Report;
