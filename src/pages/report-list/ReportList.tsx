@@ -8,14 +8,20 @@ import ReportCard from './ReportCard';
 import UpperTeethWithIssues from './UpperTeethWithIssues';
 
 export default function ReportList() {
-  const [reportData, setReportData] = useState<any[]>([]); // API 데이터를 저장
-  const [loading, setLoading] = useState(true); // 로딩 상태
+  const [reportData, setReportData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [userName, setUserName] = useState<string>('');
   const problemTeeth = [11, 12, 13, 25, 28, 35, 37, 52];
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const apiData = await fetchAllDiagnosisReports();
+
+        if (apiData.length > 0) {
+          // 첫 번째 데이터에서 userName 추출
+          setUserName(apiData[0].userName);
+        }
 
         // 데이터를 최신순으로 유지하되, diagnosisId는 오래된 데이터부터 0으로 설정
         const mappedData = apiData.map(
@@ -50,7 +56,7 @@ export default function ReportList() {
     <Container>
       <Contents>
         <TitleWrapper>
-          <UserName>이포유</UserName>
+          <UserName>{userName}</UserName>
           <Title>님의 구강 리포트입니다.</Title>
         </TitleWrapper>
         <Carousel>
