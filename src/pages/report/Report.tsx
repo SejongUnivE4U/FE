@@ -268,10 +268,14 @@ const ButtonContainer = styled.div`
 `;
 
 const LoadingText = styled.div`
-  text-align: center;
-  margin-top: 50px;
-  font-size: 18px;
-  color: #666;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 20px;
+  font-family: Pretendard;
+  font-weight: 600;
+  color: #c6cada;
 `;
 
 const ErrorText = styled.div`

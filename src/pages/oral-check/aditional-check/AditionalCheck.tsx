@@ -37,19 +37,6 @@ export default function AdditionalCheck() {
     setSelectedParts(parts);
   };
 
-  // //임시 검사 로직
-  // const handleComplete = () => {
-  //   const requestData = {
-  //     painLevel,
-  //     symptom,
-  //     selectedTeeth,
-  //     selectedGums,
-  //     selectedParts,
-  //   };
-  //   console.log('검사 요청 데이터:', requestData);
-  //   console.log('oralImages 초기화 완료');
-  // };
-
   const handleComplete = async () => {
     try {
       setLoading(true);
@@ -105,7 +92,11 @@ export default function AdditionalCheck() {
 
   if (loading) {
     return (
-      <LoadingText>결과를 처리 중입니다. 잠시만 기다려 주세요...</LoadingText>
+      <LoadingText>
+        결과를 처리 중입니다.
+        <br />
+        잠시만 기다려 주세요.
+      </LoadingText>
     );
   }
 
@@ -188,8 +179,13 @@ const ButtonContainer = styled.div`
 `;
 
 const LoadingText = styled.div`
-  text-align: center;
-  margin-top: 50px;
-  font-size: 18px;
-  color: #666;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 20px;
+  font-family: Pretendard;
+  font-weight: 600;
+  color: #c6cada;
+  line-height: 25px;
 `;
