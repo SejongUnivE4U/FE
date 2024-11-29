@@ -26,7 +26,7 @@ export default function ReportList() {
         // 데이터를 최신순으로 유지하되, diagnosisId는 오래된 데이터부터 0으로 설정
         const mappedData = apiData.map(
           (item: any, index: number, arr: any[]) => ({
-            diagnosisId: arr.length - 1 - index, // 오래된 데이터가 0부터 증가
+            diagnosisId: arr.length - index, // 오래된 데이터가 0부터 증가
             idx: index, // 화면 상에서는 최신 데이터가 위로
             images: {
               '1': item.analyzedImageUrls[0] || '', // 첫 번째 이미지만 사용
