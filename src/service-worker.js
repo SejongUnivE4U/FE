@@ -7,24 +7,44 @@ precacheAndRoute(self.__WB_MANIFEST);
 
 // Custom caching strategy for APIs
 registerRoute(
-  // API 요청에 대한 패턴 정의
   ({ url }) => url.origin === 'https://e4u-dev.netlify.app',
   new NetworkFirst({
-    cacheName: 'api-cache', // 캐시 이름
+    cacheName: 'api-cache',
     fetchOptions: {
-      credentials: 'include', // 쿠키 포함
+      credentials: 'include',
     },
-    matchOptions: {
-      ignoreSearch: true, // 쿼리 스트링 무시
-    },
+    plugins: [
+      {
+        fetchDidSucceed: async ({ response }) => {
+          console.log('API Response:', response);
+          return response;
+        },
+      },
+    ],
   }),
 );
 
-// Ensure new service worker activates immediately
-self.addEventListener('install', (event) => {
-  self.skipWaiting();
+// Debugging requests
+self.addEventListener('fetch', (event) => {
+  const { url, headers } = event.request;
+  console.log(`Intercepted Request to: ${url}`);
+  console.log('Request Headers:', [...headers.entries()]);
+
+  event.respondWith(
+    fetch(event.request, {
+      credentials: 'include',
+    })
+      .then((response) => {
+        console.log('Response Headers:', [...response.headers.entries()]);
+        return response;
+      })
+      .catch((error) => {
+        console.error('Fetch failed:', error);
+        return caches.match(event.request);
+      }),
+  );
 });
 
-self.addEventListener('activate', (event) => {
-  event.waitUntil(clients.claim());
-});
+// Ensure service worker activates immediately
+self.addEventListener('install', () => self.skipWaiting());
+self.addEventListener('activate', (event) => event.waitUntil(clients.claim()));
