@@ -57,9 +57,6 @@ export default defineConfig({
               fetchOptions: {
                 credentials: 'include', // 쿠키 포함
               },
-              matchOptions: {
-                ignoreSearch: true, // 쿼리 스트링 무시
-              },
             },
           },
         ],
