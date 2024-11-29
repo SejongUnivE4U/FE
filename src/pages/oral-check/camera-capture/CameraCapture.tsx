@@ -154,7 +154,12 @@ const CameraCapture: React.FC = () => {
         />
       </FlashWrapper>
       <VideoContainer>
-        <Video ref={videoRef} autoPlay playsInline />
+        <Video
+          ref={videoRef}
+          autoPlay
+          playsInline
+          $isFacingUser={isFacingUser}
+        />
         <Canvas ref={canvasRef} />
         {guideImageSrc && <GuideImage src={guideImageSrc} alt="Camera guide" />}
         {isFlashing && <FlashEffect />}
@@ -208,11 +213,13 @@ const GuideImage = styled.img`
   pointer-events: none;
 `;
 
-const Video = styled.video`
+const Video = styled.video<{ $isFacingUser: boolean }>`
   width: 100%;
   height: 100%;
   object-fit: cover;
   background: #000;
+  transform: ${({ $isFacingUser: isFacingUser }) =>
+    isFacingUser ? 'scaleX(-1)' : 'none'};
 `;
 
 const Canvas = styled.canvas`
