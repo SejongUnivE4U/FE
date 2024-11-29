@@ -1,6 +1,6 @@
 import { precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
-import { NetworkFirst } from 'workbox-strategies';
+import { NetworkFirst, NetworkOnly } from 'workbox-strategies';
 
 // Precache files
 precacheAndRoute(self.__WB_MANIFEST);
@@ -8,7 +8,7 @@ precacheAndRoute(self.__WB_MANIFEST);
 // Custom caching strategy for APIs
 registerRoute(
   ({ url }) => url.origin === 'https://e4u-dev.netlify.app',
-  new NetworkFirst({
+  new NetworkOnly({
     cacheName: 'api-cache',
     fetchOptions: {
       credentials: 'include',
@@ -24,23 +24,43 @@ registerRoute(
   }),
 );
 
-// Debugging requests
 self.addEventListener('fetch', (event) => {
-  const { url, headers } = event.request;
-  console.log(`Intercepted Request to: ${url}`);
-  console.log('Request Headers:', [...headers.entries()]);
+  console.log('[Service Worker] Received fetch event:', event.request.url);
+
+  // Check if request has cookies
+  console.log(
+    '[Service Worker] Request credentials mode:',
+    event.request.credentials,
+  );
 
   event.respondWith(
     fetch(event.request, {
       credentials: 'include',
     })
       .then((response) => {
-        console.log('Response Headers:', [...response.headers.entries()]);
+        console.log('[Service Worker] Fetch successful:', {
+          url: response.url,
+          status: response.status,
+          headers: [...response.headers.entries()],
+        });
         return response;
       })
       .catch((error) => {
-        console.error('Fetch failed:', error);
-        return caches.match(event.request);
+        console.error('[Service Worker] Fetch failed:', error);
+        return caches.match(event.request).then((cacheResponse) => {
+          if (cacheResponse) {
+            console.log(
+              '[Service Worker] Fallback to cache for:',
+              event.request.url,
+            );
+          } else {
+            console.error(
+              '[Service Worker] No cache available for:',
+              event.request.url,
+            );
+          }
+          return cacheResponse;
+        });
       }),
   );
 });
