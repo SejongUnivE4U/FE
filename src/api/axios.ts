@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  withCredentials: true,
+  // withCredentials: true,
 });
 
 const onError = (status: number, message: string) => {
@@ -11,6 +11,11 @@ const onError = (status: number, message: string) => {
 };
 
 instance.interceptors.request.use((config) => {
+  const accessToken = localStorage.getItem('accessToken');
+  if (accessToken) {
+    // config.headers['Authorization'] = `Bearer ${accessToken}`;
+    config.headers['Authorization'] = accessToken;
+  }
   return config;
 });
 
