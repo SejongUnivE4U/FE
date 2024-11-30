@@ -3,10 +3,34 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import instance from '../../api/axios';
 import Button from '../../components/Button';
+import Modal from '../../components/Modal';
 import Dropdown from '../../components/dropdown';
 
 export default function SignUp() {
   const navigate = useNavigate();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [additionalMessage, setAdditionalMessage] = useState('');
+  const [onModalCloseAction, setOnModalCloseAction] = useState<
+    (() => void) | null
+  >(null);
+
+  const handleOpenModal = (
+    message: string,
+    onCloseAction?: () => void,
+    additionalMsg?: string,
+  ) => {
+    setModalMessage(message);
+    setAdditionalMessage(additionalMsg || '');
+    setOnModalCloseAction(() => onCloseAction || null);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    if (onModalCloseAction) onModalCloseAction();
+  };
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -93,10 +117,13 @@ export default function SignUp() {
         age,
         gender,
       });
-      alert('회원가입이 완료되었습니다.');
-      navigate('/login');
+      handleOpenModal(
+        '회원가입이 완료되었습니다.',
+        () => navigate('/login'),
+        '로그인 화면으로 이동합니다.',
+      );
     } catch (error) {
-      alert('회원가입 중 오류가 발생했습니다.');
+      handleOpenModal('회원가입 중 오류가 발생했습니다.');
     }
   };
 
@@ -217,6 +244,14 @@ export default function SignUp() {
         <LoginText1>이미 회원이신가요?</LoginText1>
         <LoginText2 onClick={() => navigate('/login')}>로그인하기</LoginText2>
       </LoginTextWrapper>
+
+      <Modal
+        isOpen={isModalOpen}
+        title={modalMessage}
+        additionalMessage={additionalMessage}
+        onClose={handleCloseModal}
+        buttonText="확인"
+      />
     </Container>
   );
 }
