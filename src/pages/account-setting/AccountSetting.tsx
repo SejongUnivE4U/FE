@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import styled from 'styled-components';
-import { logoutUser } from '../../api/userApis';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
 
@@ -12,8 +10,8 @@ export default function AccountSetting() {
 
   const handleLogout = async () => {
     try {
-      await logoutUser();
-      Cookies.remove('refreshToken');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
       navigate('/');
     } catch (error) {
       console.error('Logout failed:', error);

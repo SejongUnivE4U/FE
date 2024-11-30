@@ -9,13 +9,3 @@ export const fetchUserData = async () => {
     throw error;
   }
 };
-
-export const logoutUser = async () => {
-  try {
-    const response = await instance.post('/logout');
-    return response.data;
-  } catch (error) {
-    console.error('Error during logout:', error);
-    throw error;
-  }
-};
