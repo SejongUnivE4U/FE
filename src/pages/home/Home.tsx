@@ -98,7 +98,9 @@ export default function Home() {
               <StatusTextContainer>
                 <StatusBox>
                   <StatusBoxLabel>최근 검사 결과</StatusBoxLabel>
-                  <StatusRisk>{statusRisk}</StatusRisk>
+                  <StatusRisk>
+                    {score !== null ? statusRisk : '없음'}
+                  </StatusRisk>
                 </StatusBox>
                 <StatusBox>
                   <StatusBoxLabel>총 검사 횟수</StatusBoxLabel>

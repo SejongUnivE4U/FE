@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 import styled from 'styled-components';
 import instance from '../../api/axios';
 import Button from '../../components/Button';
@@ -43,7 +43,11 @@ export default function Login() {
 
     try {
       const response = await instance.post('/login', { email, password });
-      Cookies.set('refreshToken', response.data.refreshToken);
+      const { accessToken, refreshToken } = response.data;
+
+      // Cookies.set('refreshToken', response.data.refreshToken);
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
       handleOpenModal(
         '로그인에 성공하였습니다.',
         () => navigate('/home'),
