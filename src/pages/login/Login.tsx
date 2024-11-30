@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 import styled from 'styled-components';
 import instance from '../../api/axios';
 import Button from '../../components/Button';
