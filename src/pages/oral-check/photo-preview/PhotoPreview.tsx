@@ -12,6 +12,7 @@ export default function PhotoPreview() {
   // const { isPhotoValid, isLoading } = usePhotoValidation(image as File | null);
   const { isPhotoValid, isLoading, error }: any = usePhotoValidation(
     image as File | null,
+    true,
   );
 
   return (

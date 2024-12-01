@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { fetchAllDiagnosisReports } from '../../api/reportApis';
+import {
+  fetchAllDiagnosisReports,
+  fetchToothDiseases,
+} from '../../api/reportApis';
 import Carousel from '../../components/Carousel';
 import Graph from './Graph';
 import LowerTeethWithIssues from './LowerTeethWithIssues';
@@ -9,9 +12,9 @@ import UpperTeethWithIssues from './UpperTeethWithIssues';
 
 export default function ReportList() {
   const [reportData, setReportData] = useState<any[]>([]);
+  const [toothDiseases, setToothDiseases] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [userName, setUserName] = useState<string>('');
-  const problemTeeth = [11, 12, 13, 25, 28, 35, 37, 52];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,25 +26,27 @@ export default function ReportList() {
           setUserName(apiData[0].userName);
         }
 
-        // 데이터를 최신순으로 유지하되, diagnosisId는 오래된 데이터부터 0으로 설정
         const mappedData = apiData.map(
           (item: any, index: number, arr: any[]) => ({
-            diagnosisId: arr.length - index, // 오래된 데이터가 0부터 증가
-            idx: index, // 화면 상에서는 최신 데이터가 위로
+            diagnosisId: arr.length - index,
+            idx: index,
             images: {
-              '1': item.analyzedImageUrls[0] || '', // 첫 번째 이미지만 사용
+              '1': item.analyzedImageUrls[0] || '',
             },
             diagnoseDate: item.diagnoseDate,
             reportScore: item.dangerPoint,
-            diagnoseCondition: '', // 빈 값
+            diagnoseCondition: item.detectedDiseases.join(', '),
           }),
         );
 
         setReportData(mappedData);
+
+        const diseasesData = await fetchToothDiseases();
+        setToothDiseases(diseasesData);
       } catch (error) {
-        console.error('리포트 데이터를 불러오는 중 오류 발생:', error);
+        console.error('데이터를 불러오는 중 오류 발생:', error);
       } finally {
-        setLoading(false); // 로딩 완료
+        setLoading(false);
       }
     };
 
@@ -64,10 +69,10 @@ export default function ReportList() {
             <Graph data={reportData} />
           </div>
           <div>
-            <LowerTeethWithIssues problemTeeth={problemTeeth} />
+            <LowerTeethWithIssues toothDiseases={toothDiseases} />
           </div>
           <div>
-            <UpperTeethWithIssues problemTeeth={problemTeeth} />
+            <UpperTeethWithIssues toothDiseases={toothDiseases} />
           </div>
         </Carousel>
         <ReportTitleWrapper>

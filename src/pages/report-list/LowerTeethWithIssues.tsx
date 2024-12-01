@@ -1,19 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import CariesIcon from '../../../public/assets/icons/caries-icon.svg';
 import LowerTeethImage from '../../../public/assets/images/lower-tooth-img.png';
+import { translateDiseaseName } from '../../utils/translateDiseaseName';
 
 interface LowerTeethWithIssuesProps {
-  problemTeeth: number[];
+  toothDiseases: Record<number, { disease_name: string; conf: number }[]>;
 }
 
 const LowerTeethWithIssues: React.FC<LowerTeethWithIssuesProps> = ({
-  problemTeeth,
+  toothDiseases,
 }) => {
   const lowerTeeth = [
     [31, 32, 33, 34, 35, 36, 37, 38],
     [41, 42, 43, 44, 45, 46, 47, 48],
   ];
+  const [selectedTooth, setSelectedTooth] = useState<number | null>(null);
 
   const teethPositions = [
     { left: '54%', top: '89%' }, //31
@@ -36,24 +38,45 @@ const LowerTeethWithIssues: React.FC<LowerTeethWithIssuesProps> = ({
 
   const smallIconTeeth = [31, 32, 41, 42];
 
+  const handleToothClick = (toothNumber: number) => {
+    setSelectedTooth(toothNumber);
+
+    // 2초 후에 선택된 상태를 초기화
+    setTimeout(() => {
+      setSelectedTooth(null);
+    }, 2000);
+  };
+
   return (
     <Container>
       <GraphTitle>치아별 증상 확인</GraphTitle>
       <TeethImage src={LowerTeethImage} alt="Lower Teeth" />
-      {lowerTeeth.flat().map((toothNumber, index) => (
-        <CariesIconWrapper
-          key={toothNumber}
-          style={{
-            left: teethPositions[index].left,
-            top: teethPositions[index].top,
-            display: problemTeeth.includes(toothNumber) ? 'block' : 'none',
-            width: smallIconTeeth.includes(toothNumber) ? '15px' : '20px',
-            height: smallIconTeeth.includes(toothNumber) ? '15px' : '20px',
-          }}
-        >
-          <CariesIconImage src={CariesIcon} alt="Caries Icon" />
-        </CariesIconWrapper>
-      ))}
+      {lowerTeeth.flat().map((toothNumber, index) => {
+        const diseases = toothDiseases[toothNumber];
+        if (!diseases || diseases.length === 0) return null;
+
+        return (
+          <CariesIconWrapper
+            key={toothNumber}
+            style={{
+              left: teethPositions[index].left,
+              top: teethPositions[index].top,
+              width: smallIconTeeth.includes(toothNumber) ? '15px' : '20px',
+              height: smallIconTeeth.includes(toothNumber) ? '15px' : '20px',
+            }}
+            onClick={() => handleToothClick(toothNumber)}
+          >
+            <CariesIconImage src={CariesIcon} alt="Caries Icon" />
+            {selectedTooth === toothNumber && (
+              <DiseaseName>
+                {diseases
+                  .map((d) => translateDiseaseName(d.disease_name))
+                  .join(', ')}
+              </DiseaseName>
+            )}
+          </CariesIconWrapper>
+        );
+      })}
     </Container>
   );
 };
@@ -91,6 +114,20 @@ const CariesIconWrapper = styled.div`
 const CariesIconImage = styled.img`
   width: 100%;
   height: 100%;
+`;
+
+const DiseaseName = styled.div`
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(71, 77, 102, 0.8);
+  color: white;
+  font-size: 12px;
+  padding: 3px 6px;
+  border-radius: 5px;
+  white-space: nowrap;
+  z-index: 10;
 `;
 
 export default LowerTeethWithIssues;
