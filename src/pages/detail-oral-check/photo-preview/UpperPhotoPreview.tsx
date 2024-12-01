@@ -26,7 +26,10 @@ export default function UpperPhotoPreview() {
   const navigate = useNavigate();
   const location = useLocation();
   const { image } = location.state || { image: null };
-  const { isPhotoValid, isLoading } = usePhotoValidation(image as File | null);
+  const { isPhotoValid, isLoading } = usePhotoValidation(
+    image as File | null,
+    false,
+  );
 
   return (
     <Container>

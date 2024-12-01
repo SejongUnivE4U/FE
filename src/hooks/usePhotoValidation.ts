@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { uploadImage } from '../api/reportApis';
+import { uploadImage, uploadInitialImage } from '../api/reportApis';
 
 interface PhotoValidationResult {
   isPhotoValid: boolean | null;
@@ -9,6 +9,7 @@ interface PhotoValidationResult {
 
 export const usePhotoValidation = (
   image: File | null,
+  isFirstImage: boolean = false,
 ): PhotoValidationResult => {
   const [isPhotoValid, setIsPhotoValid] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -32,7 +33,10 @@ export const usePhotoValidation = (
       setIsLoading(true);
       setError(undefined);
       try {
-        const result = await uploadImage(image);
+        const result = isFirstImage
+          ? await uploadInitialImage(image)
+          : await uploadImage(image);
+
         console.log(result);
         if (result?.message === 'All images are valid oral images') {
           setIsPhotoValid(true);
@@ -51,7 +55,7 @@ export const usePhotoValidation = (
     };
 
     validatePhoto();
-  }, [image]);
+  }, [image, isFirstImage]);
 
   return { isPhotoValid, isLoading, error };
 };

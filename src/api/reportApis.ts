@@ -17,6 +17,27 @@ export const uploadImage = async (file: File) => {
   }
 };
 
+// 첫번째 이미지 업로드 API
+export const uploadInitialImage = async (file: File) => {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await instance.post(
+      '/symptom/initialImageUpload',
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    console.error('이미지 업로드 실패:', error);
+    throw error;
+  }
+};
+
 // 리포트 데이터 가져오기 API
 export const fetchDiagnosisReport = async (reportId: number) => {
   try {

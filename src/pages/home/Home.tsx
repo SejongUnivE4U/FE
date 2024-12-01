@@ -11,11 +11,11 @@ import ScoreDonut from '../../components/ScoreDonut';
 type StateType = 'initial' | 'overdue' | 'needsAttention' | 'healthy';
 
 const messages: Record<StateType, string> = {
-  initial: '안녕하세요!\n지금부터 당신의 구강 관리를\n도와줄 티티입니다!',
-  overdue: '구강 검사를 한지 오래됐어요!\n지금 바로 검사해보세요!',
+  initial: '안녕하세요!\n지금부터 당신의 구강 관리를\n도와줄 티티입니다!', //검사 0회
+  overdue: '구강 검사를 한지 오래됐어요!\n지금 바로 검사해보세요!', //검사한지 4주 지남
   needsAttention:
-    '현재 구강 상태가 좋지 않아요!\n가까운 치과를 방문해보시는 건 어때요?',
-  healthy: '훌륭해요!\n건강한 상태를 유지하고 있군요! 계속해서 관리해봅시다!',
+    '현재 구강 상태가 좋지 않아요!\n가까운 치과를 방문해보시는 건 어때요?', //최근 검사 결과 40점 이하
+  healthy: '훌륭해요!\n건강한 상태를 유지하고 있군요! 계속해서 관리해봅시다!', //나머지
 };
 
 const determineStatus = (score: number): string => {
