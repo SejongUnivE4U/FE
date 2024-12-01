@@ -26,29 +26,27 @@ export default function ReportList() {
           setUserName(apiData[0].userName);
         }
 
-        // 데이터를 최신순으로 유지하되, diagnosisId는 오래된 데이터부터 0으로 설정
         const mappedData = apiData.map(
           (item: any, index: number, arr: any[]) => ({
-            diagnosisId: arr.length - index, // 오래된 데이터가 0부터 증가
-            idx: index, // 화면 상에서는 최신 데이터가 위로
+            diagnosisId: arr.length - index,
+            idx: index,
             images: {
-              '1': item.analyzedImageUrls[0] || '', // 첫 번째 이미지만 사용
+              '1': item.analyzedImageUrls[0] || '',
             },
             diagnoseDate: item.diagnoseDate,
             reportScore: item.dangerPoint,
-            diagnoseCondition: '', // 빈 값
+            diagnoseCondition: item.detectedDiseases.join(', '),
           }),
         );
 
         setReportData(mappedData);
 
         const diseasesData = await fetchToothDiseases();
-        console.log('Fetched Tooth Diseases Data:', diseasesData);
         setToothDiseases(diseasesData);
       } catch (error) {
         console.error('데이터를 불러오는 중 오류 발생:', error);
       } finally {
-        setLoading(false); // 로딩 완료
+        setLoading(false);
       }
     };
 
