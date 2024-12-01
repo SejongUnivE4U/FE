@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import CariesIcon from '../../../public/assets/icons/caries-icon.svg';
 import LowerTeethImage from '../../../public/assets/images/lower-tooth-img.png';
+import { translateDiseaseName } from '../../utils/translateDiseaseName';
 
 interface LowerTeethWithIssuesProps {
   toothDiseases: Record<number, { disease_name: string; conf: number }[]>;
@@ -68,7 +69,9 @@ const LowerTeethWithIssues: React.FC<LowerTeethWithIssuesProps> = ({
             <CariesIconImage src={CariesIcon} alt="Caries Icon" />
             {selectedTooth === toothNumber && (
               <DiseaseName>
-                {diseases.map((d) => d.disease_name).join(', ')}
+                {diseases
+                  .map((d) => translateDiseaseName(d.disease_name))
+                  .join(', ')}
               </DiseaseName>
             )}
           </CariesIconWrapper>
@@ -118,7 +121,7 @@ const DiseaseName = styled.div`
   top: -20px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(71, 77, 102, 0.8);
   color: white;
   font-size: 12px;
   padding: 3px 6px;
