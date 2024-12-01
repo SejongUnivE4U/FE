@@ -229,6 +229,7 @@ const SectionContent = styled.p`
   font-size: 14px;
   color: #474d66;
   line-height: 1.5;
+  white-space: pre-line;
 `;
 
 // const ListItem = styled.button`
