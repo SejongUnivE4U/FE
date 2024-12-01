@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { fetchAllDiagnosisReports } from '../../api/reportApis';
+import {
+  fetchAllDiagnosisReports,
+  fetchToothDiseases,
+} from '../../api/reportApis';
 import Carousel from '../../components/Carousel';
 import Graph from './Graph';
 import LowerTeethWithIssues from './LowerTeethWithIssues';
@@ -9,9 +12,9 @@ import UpperTeethWithIssues from './UpperTeethWithIssues';
 
 export default function ReportList() {
   const [reportData, setReportData] = useState<any[]>([]);
+  const [toothDiseases, setToothDiseases] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [userName, setUserName] = useState<string>('');
-  const problemTeeth = [11, 12, 13, 25, 28, 35, 37, 52];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,8 +41,12 @@ export default function ReportList() {
         );
 
         setReportData(mappedData);
+
+        const diseasesData = await fetchToothDiseases();
+        console.log('Fetched Tooth Diseases Data:', diseasesData);
+        setToothDiseases(diseasesData);
       } catch (error) {
-        console.error('리포트 데이터를 불러오는 중 오류 발생:', error);
+        console.error('데이터를 불러오는 중 오류 발생:', error);
       } finally {
         setLoading(false); // 로딩 완료
       }
@@ -64,10 +71,10 @@ export default function ReportList() {
             <Graph data={reportData} />
           </div>
           <div>
-            <LowerTeethWithIssues problemTeeth={problemTeeth} />
+            <LowerTeethWithIssues toothDiseases={toothDiseases} />
           </div>
           <div>
-            <UpperTeethWithIssues problemTeeth={problemTeeth} />
+            <UpperTeethWithIssues toothDiseases={toothDiseases} />
           </div>
         </Carousel>
         <ReportTitleWrapper>

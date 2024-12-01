@@ -80,3 +80,14 @@ export const fetchAllDiagnosisReports = async () => {
     throw error;
   }
 };
+
+// 치아별 증상 데이터 가져오기 API
+export const fetchToothDiseases = async () => {
+  try {
+    const response = await instance.get(`/symptom/toothDiseases`);
+    return response.data;
+  } catch (error) {
+    console.error('치아별 증상 데이터 가져오기 실패:', error);
+    throw error;
+  }
+};
