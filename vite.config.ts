@@ -6,13 +6,6 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      strategies: 'injectManifest', // InjectManifest 전략 사용
-      srcDir: 'src', // 서비스 워커 파일 위치
-      filename: 'service-worker.js', // 생성될 서비스 워커 파일 이름
-      injectManifest: {
-        swSrc: './src/service-worker.js', // 소스 서비스 워커
-        swDest: 'dist/service-worker.js', // 빌드 후 출력 위치
-      },
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
@@ -43,21 +36,6 @@ export default defineConfig({
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable',
-          },
-        ],
-      },
-      workbox: {
-        runtimeCaching: [
-          {
-            urlPattern: ({ url }: { url: URL }) =>
-              url.origin === 'https://e4u-dev.netlify.app',
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'api-cache', // 캐시 이름
-              fetchOptions: {
-                credentials: 'include', // 쿠키 포함
-              },
-            },
           },
         ],
       },
