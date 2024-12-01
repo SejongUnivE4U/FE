@@ -10,7 +10,7 @@ export default function Landing() {
       <Subtitle>
         당신을 위한
         <br />
-        구강체크 도우미 <br /> -v 12/01 15:30
+        구강체크 도우미 <br /> -v 12/01 16:27
       </Subtitle>
       <Logo src="/assets/icons/logo.svg" alt="E4U 로고" />
       <ButtonWrapper>
