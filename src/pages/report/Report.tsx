@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-// import ArrowIcon from '../../../public/assets/icons/arrow-right-icon.svg';
+import ArrowIcon from '../../../public/assets/icons/arrow-right-icon.svg';
 import { fetchDiagnosisReport } from '../../api/reportApis';
 import Button from '../../components/Button';
 import CloseButton from '../../components/CloseButton';
 import ScoreDonut from '../../components/ScoreDonut';
+import treatmentContents from './treatmentContents';
+import treatmentMethodsMap from './treatmentMethodsMap';
+import TreatmentModal from './treatmentModal';
 
 const Report = () => {
   const navigate = useNavigate();
@@ -23,6 +26,11 @@ const Report = () => {
   } | null>(null);
 
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState<{
+    title: string;
+    content: string;
+  } | null>(null);
 
   useEffect(() => {
     const determineStatus = (score: number) => {
@@ -33,10 +41,19 @@ const Report = () => {
       return '매우 좋음';
     };
 
+    const getTreatmentMethods = (detectedDiseases: string[]) => {
+      const methods = detectedDiseases.flatMap(
+        (disease) => treatmentMethodsMap[disease] || [],
+      );
+      // 중복 제거
+      return Array.from(new Set(methods));
+    };
+
     const loadReportData = async () => {
       try {
         if (reportId) {
           const data = await fetchDiagnosisReport(Number(reportId));
+          const treatmentMethods = getTreatmentMethods(data.detectedDiseases);
           const mappedData = {
             userName: data.userName,
             dangerPoint: data.dangerPoint,
@@ -45,7 +62,8 @@ const Report = () => {
             result: data.result,
             detailedResult: data.detailed_result,
             careMethod: data.care_method,
-            treatmentMethods: ['복합 레진', '크라운'],
+            treatmentMethods,
+            detectedDiseases: data.detectedDiseases,
           };
           setReportData(mappedData);
         }
@@ -58,6 +76,20 @@ const Report = () => {
 
     loadReportData();
   }, [reportId]);
+
+  const openModal = (method: string) => {
+    setModalContent({
+      title: method,
+      content:
+        treatmentContents[method] || '해당 치료 방법에 대한 정보가 없습니다.',
+    });
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalContent(null);
+  };
 
   if (loading) {
     return <LoadingText>데이터를 불러오는 중...</LoadingText>;
@@ -104,6 +136,15 @@ const Report = () => {
             <SectionContent>{reportData.detailedResult}</SectionContent>
           </Section>
           <Section>
+            <SectionTitle>치료 방법</SectionTitle>
+            {reportData.treatmentMethods.map((method, index) => (
+              <ListItem key={index} onClick={() => openModal(method)}>
+                <span>{method}</span>
+                <Icon src={ArrowIcon} alt="화살표 아이콘" />
+              </ListItem>
+            ))}
+          </Section>
+          <Section>
             <SectionTitle>관리 방법</SectionTitle>
             <SectionContent>{reportData.careMethod}</SectionContent>
           </Section>
@@ -119,6 +160,12 @@ const Report = () => {
             보고서 목록
           </Button>
         </ButtonContainer>
+        <TreatmentModal
+          isOpen={isModalOpen}
+          title={modalContent?.title || ''}
+          content={modalContent?.content || ''}
+          onClose={closeModal}
+        />
       </Contents>
     </PageContainer>
   );
@@ -232,32 +279,32 @@ const SectionContent = styled.p`
   white-space: pre-line;
 `;
 
-// const ListItem = styled.button`
-//   width: 100%;
-//   height: 58px;
-//   font-family: Pretendard;
-//   font-size: 14px;
-//   color: #474d66;
-//   padding: 10px 20px;
-//   border-radius: 10px;
-//   border: 1px solid #8f95b2;
-//   margin-bottom: 14px;
-//   background: #fff;
-//   display: flex;
-//   align-items: center;
-//   justify-content: space-between;
-//   cursor: pointer;
-//   transition: background-color 0.3s;
+const ListItem = styled.button`
+  width: 100%;
+  height: 50px;
+  font-family: Pretendard;
+  font-size: 14px;
+  color: #474d66;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px solid #8f95b2;
+  margin-bottom: 14px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: background-color 0.3s;
 
-//   &:hover {
-//     background-color: #f7f7fa;
-//   }
-// `;
+  &:hover {
+    background-color: #f7f7fa;
+  }
+`;
 
-// const Icon = styled.img`
-//   width: 16px;
-//   height: auto;
-// `;
+const Icon = styled.img`
+  width: 16px;
+  height: auto;
+`;
 
 const ButtonContainer = styled.div`
   display: flex;

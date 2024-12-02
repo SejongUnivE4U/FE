@@ -10,7 +10,7 @@ export default function Landing() {
       <Subtitle>
         당신을 위한
         <br />
-        구강체크 도우미 <br /> -v 12/01 16:27
+        구강체크 도우미
       </Subtitle>
       <Logo src="/assets/icons/logo.svg" alt="E4U 로고" />
       <ButtonWrapper>
@@ -21,6 +21,7 @@ export default function Landing() {
           회원가입하기
         </Button>
       </ButtonWrapper>
+      <VersionText>1.0.0</VersionText>
     </Container>
   );
 }
@@ -56,4 +57,14 @@ const ButtonWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 22px;
+`;
+
+const VersionText = styled.p`
+  position: absolute;
+  bottom: 35px;
+  font-family: Pretendard;
+  font-size: 12px;
+  color: #8f95b2;
+  text-align: center;
+  letter-spacing: 2px;
 `;
