@@ -61,10 +61,6 @@ export default function AdditionalCheck() {
     }
   };
 
-  const handleSkip = () => {
-    // Logic to handle skip (navigate to next page)
-  };
-
   const renderContent = () => {
     switch (selectedOption) {
       case '치아':
@@ -121,9 +117,6 @@ export default function AdditionalCheck() {
         <ButtonContainer>
           <Button onClick={handleComplete} variant="primary">
             완료
-          </Button>
-          <Button onClick={handleSkip} variant="outline">
-            건너띄기
           </Button>
         </ButtonContainer>
       </Contents>
