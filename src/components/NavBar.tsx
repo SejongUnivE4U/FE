@@ -73,14 +73,14 @@ const NavBarContainer = styled.nav`
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 75px;
+  height: 90px;
   background-color: #fff;
   border-top: 1px solid #e0e0e0;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 15px 7px 20px;
-  border-top: 0.5 #b3b3b3;
+  padding: 11px 9px 32px;
+  border-top: 0.4 #b3b3b3;
 `;
 
 const NavItem = styled.div<{ $isActive: boolean }>`

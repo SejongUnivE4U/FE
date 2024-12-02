@@ -137,6 +137,7 @@ const CameraCapture: React.FC = () => {
   const guideImageSrc = getGuideImage();
 
   const handleCancel = () => {
+    stopCamera();
     if (location.state && location.state.from) {
       navigate(-1);
     } else {
