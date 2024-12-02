@@ -73,14 +73,14 @@ const NavBarContainer = styled.nav`
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 100px;
+  height: 75px;
   background-color: #fff;
   border-top: 1px solid #e0e0e0;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 10px 0 20px;
-  border-top: solid #b3b3b3;
+  padding: 15px 7px 20px;
+  border-top: 0.5 #b3b3b3;
 `;
 
 const NavItem = styled.div<{ $isActive: boolean }>`
@@ -88,7 +88,7 @@ const NavItem = styled.div<{ $isActive: boolean }>`
   flex-direction: column;
   align-items: center;
   font-family: Pretendard;
-  font-size: 13px;
+  font-size: 11px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
@@ -98,7 +98,7 @@ const NavItem = styled.div<{ $isActive: boolean }>`
 `;
 
 const NavIcon = styled.img`
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   margin-bottom: 4px;
 `;
