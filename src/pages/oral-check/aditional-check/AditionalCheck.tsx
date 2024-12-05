@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAtom } from 'jotai';
 import styled from 'styled-components';
 import { submitSymptom } from '../../../api/reportApis';
 import BackButton from '../../../components/BackButton';
 import Button from '../../../components/Button';
+import { clearImagesAtom, imagesAtom } from '../../../state/imageAtoms';
 import GumSelector from './GumSelector';
 import OptionDropdown from './OptionDropdown';
 import OtherSelector from './OtherSelector';
@@ -20,6 +22,8 @@ export default function AdditionalCheck() {
   const [selectedGums, setSelectedGums] = useState<string[]>([]);
   const [selectedParts, setSelectedParts] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [imageArray] = useAtom(imagesAtom);
+  const [, clearImages] = useAtom(clearImagesAtom);
 
   useEffect(() => {
     setSelectedTeeth([]);
@@ -47,17 +51,31 @@ export default function AdditionalCheck() {
         ...selectedParts,
       ];
 
+      const formData = new FormData();
+      formData.append('painLevel', String(painLevel));
+      formData.append('symptomText', JSON.stringify([symptom]));
+      formData.append('symptomArea', JSON.stringify(symptomArea));
+
+      // 이미지 배열 추가
+      imageArray.forEach((image, index) => {
+        formData.append('file', image, `image-${index}.png`);
+      });
+
       // API 요청
-      const response = await submitSymptom(painLevel, [symptom], symptomArea);
+      const response = await submitSymptom(formData);
 
       // 결과 출력
       console.log('증상 제출 성공:', response);
+
+      // 이미지 배열 초기화
+      clearImages();
 
       // 결과로 받은 diagnosisId로 이동
       const diagnosisId = response.diagnosisId;
       navigate(`/report/${diagnosisId}`);
     } catch (error) {
       console.error('증상 제출 실패:', error);
+      clearImages();
     }
   };
 

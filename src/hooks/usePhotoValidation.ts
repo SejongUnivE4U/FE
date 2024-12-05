@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import { uploadImage, uploadInitialImage } from '../api/reportApis';
+import { useAtom } from 'jotai';
+import { uploadImage } from '../api/reportApis';
+import { addImageAtom, clearImagesAtom } from '../state/imageAtoms';
 
 interface PhotoValidationResult {
   isPhotoValid: boolean | null;
@@ -14,6 +16,8 @@ export const usePhotoValidation = (
   const [isPhotoValid, setIsPhotoValid] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | undefined>(undefined);
+  const [, addImage] = useAtom(addImageAtom);
+  const [, clearImages] = useAtom(clearImagesAtom);
 
   let isRequesting = false; // 중복 요청 방지 플래그
 
@@ -30,16 +34,20 @@ export const usePhotoValidation = (
         return;
       }
 
+      if (isFirstImage) {
+        // 첫 번째 이미지일 경우 아톰 초기화
+        clearImages();
+      }
+
       setIsLoading(true);
       setError(undefined);
       try {
-        const result = isFirstImage
-          ? await uploadInitialImage(image)
-          : await uploadImage(image);
+        const result = await uploadImage(image);
 
         console.log(result);
         if (result?.message === 'All images are valid oral images') {
           setIsPhotoValid(true);
+          addImage(image); // 유효한 이미지를 Jotai 상태에 추가
         } else {
           setIsPhotoValid(false);
           setError('Invalid oral image');
