@@ -21,7 +21,7 @@ const Graph: React.FC<GraphProps> = ({ data }) => {
     );
   }
 
-  const displayedData = data.slice(-20);
+  const displayedData = data.slice(-20).reverse();
 
   return (
     <GraphWrapper>
