@@ -21,7 +21,7 @@ export default function Landing() {
           회원가입하기
         </Button>
       </ButtonWrapper>
-      <VersionText>1.1.0</VersionText>
+      <VersionText>1.1.1</VersionText>
     </Container>
   );
 }
