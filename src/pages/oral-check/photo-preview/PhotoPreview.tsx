@@ -9,7 +9,6 @@ export default function PhotoPreview() {
   const navigate = useNavigate();
   const location = useLocation();
   const { image } = location.state || { image: null };
-  // const { isPhotoValid, isLoading } = usePhotoValidation(image as File | null);
   const { isPhotoValid, isLoading, error }: any = usePhotoValidation(
     image as File | null,
     true,
@@ -60,12 +59,6 @@ export default function PhotoPreview() {
           <Notice>이미지가 없습니다. 다시 시도해 주세요.</Notice>
         )}
       </Contents>
-      {/* {error && (
-        <DebugContainer>
-          <DebugTitle>디버깅 정보:</DebugTitle>
-          <DebugContent>{JSON.stringify(error, null, 2)}</DebugContent>
-        </DebugContainer>
-      )} */}
     </Container>
   );
 }

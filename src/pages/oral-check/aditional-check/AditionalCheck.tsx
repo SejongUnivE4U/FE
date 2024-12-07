@@ -64,9 +64,6 @@ export default function AdditionalCheck() {
       // API 요청
       const response = await submitSymptom(formData);
 
-      // 결과 출력
-      console.log('증상 제출 성공:', response);
-
       // 이미지 배열 초기화
       clearImages();
 

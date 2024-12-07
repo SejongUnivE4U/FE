@@ -22,7 +22,6 @@ export default function ReportList() {
         const apiData = await fetchAllDiagnosisReports();
 
         if (apiData.length > 0) {
-          // 첫 번째 데이터에서 userName 추출
           setUserName(apiData[0].userName);
         }
 

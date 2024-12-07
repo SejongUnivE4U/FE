@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import Layout from './components/Layout';
 import AccountSetting from './pages/account-setting/AccountSetting';
-import DetailOralCheck from './pages/detail-oral-check/DetailOralCheck';
 import FrontPhotoPreview from './pages/detail-oral-check/photo-preview/FrontPhotoPreview';
 import LowerPhotoPreview from './pages/detail-oral-check/photo-preview/LowerPhotoPreview';
 import UpperPhotoPreview from './pages/detail-oral-check/photo-preview/UpperPhotoPreview';
@@ -68,6 +67,7 @@ function App() {
               <Route path="/oral-check/guide" element={<OralCheckGuide />} />
               <Route path="/oral-check/type" element={<OralCheckType />} />
               <Route path="/oral-check/photo" element={<OralCheckPhoto />} />
+
               <Route
                 path="/oral-check/camera-capture"
                 element={<CameraCapture />}
@@ -81,7 +81,6 @@ function App() {
                 element={<AdditionalCheck />}
               />
 
-              <Route path="/detail-oral-check" element={<DetailOralCheck />} />
               <Route
                 path="/detail-oral-check/front-photo"
                 element={<FrontPhoto />}

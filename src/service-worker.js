@@ -2,10 +2,8 @@ import { precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { NetworkFirst, NetworkOnly } from 'workbox-strategies';
 
-// Precache files
 precacheAndRoute(self.__WB_MANIFEST);
 
-// Custom caching strategy for APIs
 registerRoute(
   ({ url }) => url.origin === 'https://e4u-dev.netlify.app',
   new NetworkOnly({
@@ -27,7 +25,6 @@ registerRoute(
 self.addEventListener('fetch', (event) => {
   console.log('[Service Worker] Received fetch event:', event.request.url);
 
-  // Check if request has cookies
   console.log(
     '[Service Worker] Request credentials mode:',
     event.request.credentials,
@@ -65,6 +62,5 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// Ensure service worker activates immediately
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', (event) => event.waitUntil(clients.claim()));
