@@ -2,7 +2,6 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  // withCredentials: true,
 });
 
 const onError = (status: number, message: string) => {
@@ -13,7 +12,6 @@ const onError = (status: number, message: string) => {
 instance.interceptors.request.use((config) => {
   const accessToken = localStorage.getItem('accessToken');
   if (accessToken) {
-    // config.headers['Authorization'] = `Bearer ${accessToken}`;
     config.headers['Authorization'] = accessToken;
   }
   return config;
@@ -29,10 +27,9 @@ instance.interceptors.response.use(
       error.response?.status === 401 &&
       originalRequest &&
       !originalRequest.headers._retry &&
-      originalRequest.url !== '/auth/tokens' // 토큰 재발급 관련 처리 예외
+      originalRequest.url !== '/auth/tokens'
     ) {
       originalRequest.headers._retry = true;
-      // 리프레시 토큰 처리 로직 추가
       return instance(originalRequest);
     }
 

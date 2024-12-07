@@ -4,7 +4,7 @@ import CloseButton from '../../components/CloseButton';
 
 declare global {
   interface Window {
-    kakao: any; // Kakao Maps API를 사용하기 위해 선언
+    kakao: any;
   }
 }
 
@@ -12,7 +12,6 @@ const DentalMap: React.FC = () => {
   const [places, setPlaces] = useState<any[]>([]); // 검색된 장소 데이터를 저장
 
   useEffect(() => {
-    // Kakao 지도 스크립트 로드
     const script = document.createElement('script');
     script.src =
       'https://dapi.kakao.com/v2/maps/sdk.js?appkey=e715d889c4b0b78b31ac11397f6d93c2&libraries=services';
@@ -180,7 +179,7 @@ const PlaceList = styled.ul`
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 15px; /* 각 카드 간격 추가 */
+  gap: 15px;
 `;
 
 const PlaceItem = styled.li`
@@ -209,7 +208,6 @@ const PlaceItem = styled.li`
     margin: 0;
   }
 
-  /* 추가 정보 텍스트 색상 */
   span {
     color: #999;
     font-size: 12px;
