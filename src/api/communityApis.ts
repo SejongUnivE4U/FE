@@ -26,3 +26,25 @@ export const fetchCommunities = async () => {
     throw error;
   }
 };
+
+// 커뮤니티 초대 API 추가
+export const inviteToCommunity = async (
+  communityId: number,
+  userId: number,
+) => {
+  try {
+    const response = await instance.post(
+      '/community/invite',
+      { communityId, userId }, // 요청 본문
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    console.error('커뮤니티 초대 실패:', error);
+    throw error;
+  }
+};

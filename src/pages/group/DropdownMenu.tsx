@@ -1,41 +1,57 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import PlusIcon from '../../../public/assets/icons/plus-icon.svg';
-// 초대 모달 임포트
+import { inviteToCommunity } from '../../api/communityApis';
+import Modal from '../../components/Modal';
 import ChallengeAddModal from './ChallengeAddModal';
 import InviteModal from './InviteModal';
 
-// 챌린지 추가 모달 임포트
-
 const DropdownMenu: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false); // 드롭다운 열림/닫힘 상태
-  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false); // 초대 모달 상태
-  const [isChallengeModalOpen, setIsChallengeModalOpen] = useState(false); // 챌린지 추가 모달 상태
+  const [isOpen, setIsOpen] = useState(false);
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+  const [isChallengeModalOpen, setIsChallengeModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [additionalMessage, setAdditionalMessage] = useState('');
 
-  // 드롭다운 메뉴 토글
+  const { groupId } = useParams();
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  // 친구 초대 클릭 핸들러
   const handleInviteClick = () => {
-    setIsOpen(false); // 드롭다운 닫기
-    setIsInviteModalOpen(true); // 초대 모달 열기
+    setIsOpen(false);
+    setIsInviteModalOpen(true);
   };
 
-  // 챌린지 추가 클릭 핸들러
   const handleChallengeClick = () => {
-    setIsOpen(false); // 드롭다운 닫기
-    setIsChallengeModalOpen(true); // 챌린지 추가 모달 열기
+    setIsOpen(false);
+    setIsChallengeModalOpen(true);
   };
 
-  // 초대 완료 핸들러
-  const handleInvite = (id: string) => {
-    console.log('초대된 아이디:', id);
-    // API 호출 로직 추가 예정
+  const handleInvite = async (userId: string) => {
+    try {
+      if (!groupId) {
+        throw new Error('그룹 ID가 존재하지 않습니다.');
+      }
+
+      const response = await inviteToCommunity(Number(groupId), Number(userId));
+      console.log('초대 성공:', response);
+
+      setModalMessage('초대가 성공적으로 완료되었습니다!');
+      setAdditionalMessage('친구가 그룹에 추가되었습니다.');
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error('초대 실패:', error);
+
+      setModalMessage('초대에 실패했습니다.');
+      setAdditionalMessage('다시 시도해 주세요.');
+      setIsModalOpen(true);
+    }
   };
 
-  // 챌린지 시작 핸들러
   const handleStartChallenge = (challengeId: number) => {
     console.log('선택된 챌린지 ID:', challengeId);
     // API 호출 로직 추가 예정
@@ -61,7 +77,7 @@ const DropdownMenu: React.FC = () => {
       <InviteModal
         isOpen={isInviteModalOpen}
         onClose={() => setIsInviteModalOpen(false)}
-        onInvite={handleInvite}
+        onInvite={handleInvite} // 초대 함수 연결
       />
 
       {/* 챌린지 추가 모달 */}
@@ -70,13 +86,20 @@ const DropdownMenu: React.FC = () => {
         onClose={() => setIsChallengeModalOpen(false)}
         onStartChallenge={handleStartChallenge}
       />
+
+      {/* 공통 모달 */}
+      <Modal
+        isOpen={isModalOpen}
+        title={modalMessage}
+        additionalMessage={additionalMessage}
+        onClose={() => setIsModalOpen(false)}
+      />
     </Container>
   );
 };
 
 export default DropdownMenu;
 
-// 스타일 정의
 const Container = styled.div`
   position: relative;
   display: inline-block;
@@ -95,11 +118,10 @@ const IconButton = styled.button<{ $isOpen: boolean }>`
   cursor: pointer;
   transition: transform 0.3s ease;
 
-  /* 버튼 회전 효과 */
   ${({ $isOpen }) =>
     $isOpen &&
     css`
-      transform: rotate(45deg); /* X 모양 회전 */
+      transform: rotate(45deg);
     `}
 `;
 
@@ -110,7 +132,7 @@ const IconImage = styled.img`
 
 const MenuList = styled.ul`
   position: absolute;
-  bottom: 65px; /* 아이콘 위에 위치 */
+  bottom: 65px;
   right: 0;
   width: 129px;
   border-radius: 12px;
@@ -120,14 +142,12 @@ const MenuList = styled.ul`
 `;
 
 const MenuItem = styled.li<{ $disabled?: boolean; $danger?: boolean }>`
-  padding: 11px; /* 위아래 여백 */
+  padding: 11px;
   font-size: 14px;
   color: ${({ $disabled, $danger }) =>
     $disabled ? '#B0B0B0' : $danger ? '#FF5E5E' : '#4B4B4B'};
   cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
   background: #fff;
-
-  /* 텍스트 가운데 정렬 */
   text-align: center;
 
   &:hover {
