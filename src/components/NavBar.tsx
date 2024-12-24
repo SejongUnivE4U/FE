@@ -57,14 +57,23 @@ export default function NavBar() {
       </NavItem>
       <NavItem
         onClick={() => handleNavigation('/groups')}
-        $isActive={location.pathname === '/groups'}
+        $isActive={
+          location.pathname === '/groups' ||
+          /^\/group\/\d+$/.test(location.pathname)
+        }
       >
         <NavIcon
-          src={location.pathname === '/groups' ? TeamActiveIcon : TeamIcon}
+          src={
+            location.pathname === '/groups' ||
+            /^\/group\/\d+$/.test(location.pathname)
+              ? TeamActiveIcon
+              : TeamIcon
+          }
           alt="그룹 아이콘"
         />
         그룹
       </NavItem>
+
       <NavItem
         onClick={() => handleNavigation('/account-setting')}
         $isActive={location.pathname === '/account-setting'}

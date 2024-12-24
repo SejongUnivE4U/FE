@@ -1,44 +1,67 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import PlusIcon from '../../../public/assets/icons/plus-circle-icon.svg';
+import { fetchCommunities } from '../../api/communityApis';
 import GroupCard from './GroupCard';
+
+interface Group {
+  communityId: number;
+  communityName: string;
+  memberImages: (string | null)[]; // 멤버 이미지 배열
+}
 
 export default function Groups() {
   const navigate = useNavigate();
+  const [groups, setGroups] = useState<Group[]>([]); // 그룹 데이터 상태
+  const [loading, setLoading] = useState<boolean>(true); // 로딩 상태
+  const [error, setError] = useState<string | null>(null); // 에러 상태
 
-  const groupData = [
-    {
-      groupName: '우리가족',
-      memberImages: [
-        'https://example.com/member1.png',
-        null,
-        'https://example.com/member3.png',
-      ],
-    },
-    {
-      groupName: '친구들',
-      memberImages: [
-        'https://example.com/friend1.png',
-        'https://example.com/friend2.png',
-        '',
-      ],
-    },
-  ];
+  // 그룹 데이터 불러오기
+  useEffect(() => {
+    const loadCommunities = async () => {
+      try {
+        setLoading(true); // 로딩 시작
+        const data = await fetchCommunities(); // API 호출
+        const formattedData = data.map((item: any) => ({
+          communityId: item.communityId,
+          communityName: item.communityName,
+          memberImages: [null, null, null], // 임시 멤버 이미지
+        }));
+        setGroups(formattedData); // 데이터 상태 업데이트
+      } catch (err) {
+        setError('그룹 데이터를 불러오지 못했습니다.');
+        console.error(err);
+      } finally {
+        setLoading(false); // 로딩 종료
+      }
+    };
+    loadCommunities();
+  }, []);
 
   const handleAddGroup = () => {
     navigate('/groups/add');
   };
+
+  // 그룹 클릭 시 상세 페이지로 이동
+  const handleGroupClick = (communityId: number) => {
+    navigate(`/group/${communityId}`);
+  };
+
+  if (loading) return <LoadingMessage>불러오는 중...</LoadingMessage>;
+  if (error) return <ErrorMessage>{error}</ErrorMessage>;
 
   return (
     <PageContainer>
       <Contents>
         <Title>그룹</Title>
         <GroupListContainer>
-          {groupData.map((group, index) => (
+          {groups.map((group) => (
             <GroupCard
-              key={index}
-              groupName={group.groupName}
+              key={group.communityId}
+              groupName={group.communityName}
               memberImages={group.memberImages}
+              onClick={() => handleGroupClick(group.communityId)}
             />
           ))}
           <AddGroupCard onClick={handleAddGroup}>
@@ -96,4 +119,16 @@ const AddGroupCard = styled.div`
 const PlusIconWrapper = styled.img`
   width: 40px;
   height: 40px;
+`;
+
+const LoadingMessage = styled.p`
+  font-size: 16px;
+  color: #4b4b4b;
+  margin-top: 20px;
+`;
+
+const ErrorMessage = styled.p`
+  font-size: 16px;
+  color: #ff4d4f;
+  margin-top: 20px;
 `;

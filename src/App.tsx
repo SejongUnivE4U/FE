@@ -114,7 +114,8 @@ function App() {
 
               <Route path="/groups" element={<Groups />} />
               <Route path="/groups/add" element={<GroupAdd />} />
-              <Route path="/group" element={<Group />} />
+              {/* <Route path="/group" element={<Group />} /> */}
+              <Route path="/group/:groupId" element={<Group />} />
             </Route>
           </Routes>
         </Router>

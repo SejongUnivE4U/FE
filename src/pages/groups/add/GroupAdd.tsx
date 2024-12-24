@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { createCommunity } from '../../../api/communityApis';
 import Button from '../../../components/Button';
 import CloseButton from '../../../components/CloseButton';
 import Modal from '../../../components/Modal';
@@ -38,15 +39,16 @@ const GroupAdd: React.FC = () => {
     e.preventDefault();
 
     try {
-      // 여기 API 호출 로직 추가 예정
-      console.log('그룹 생성 요청:', groupName);
+      const response = await createCommunity(groupName);
+      console.log('그룹 생성 성공:', response);
 
       handleOpenModal(
         '그룹이 성공적으로 생성되었습니다!',
-        () => navigate('/group'),
+        () => navigate('/groups'),
         '그룹 목록으로 이동합니다.',
       );
     } catch (error) {
+      console.error('그룹 생성 실패:', error);
       handleOpenModal('그룹 생성에 실패했습니다. 다시 시도해 주세요.');
     }
   };

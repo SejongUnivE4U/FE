@@ -5,9 +5,14 @@ import ProfileIcon from '../../../public/assets/icons/profile-icon.svg';
 interface GroupCardProps {
   groupName: string;
   memberImages: (string | null)[];
+  onClick: () => void;
 }
 
-const GroupCard: React.FC<GroupCardProps> = ({ groupName, memberImages }) => {
+const GroupCard: React.FC<GroupCardProps> = ({
+  groupName,
+  memberImages,
+  onClick,
+}) => {
   const handleImageError = (
     e: React.SyntheticEvent<HTMLImageElement, Event>,
   ) => {
@@ -15,7 +20,7 @@ const GroupCard: React.FC<GroupCardProps> = ({ groupName, memberImages }) => {
   };
 
   return (
-    <Card>
+    <Card onClick={onClick}>
       <Title>{groupName}</Title>
       <MembersContainer>
         {memberImages.map((img, index) => (
