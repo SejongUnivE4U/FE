@@ -164,7 +164,7 @@ const InviteButton = styled.button`
   width: 237px;
   height: 40px;
   border-radius: 10px;
-  background: ${({ disabled }) => (disabled ? '#c6cada' : '#32a68a')};
+  background: ${({ disabled }) => (disabled ? '#c6cada' : '#4CBFA4')};
   color: ${({ disabled }) => (disabled ? '#F7F7FA' : '#FFFFFF')};
   font-size: 14px;
   font-style: normal;

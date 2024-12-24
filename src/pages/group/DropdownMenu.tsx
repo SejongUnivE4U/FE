@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import PlusIcon from '../../../public/assets/icons/plus-icon.svg';
+// 초대 모달 임포트
+import ChallengeAddModal from './ChallengeAddModal';
 import InviteModal from './InviteModal';
 
-// 초대 모달 임포트
+// 챌린지 추가 모달 임포트
 
 const DropdownMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false); // 드롭다운 열림/닫힘 상태
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false); // 초대 모달 상태
+  const [isChallengeModalOpen, setIsChallengeModalOpen] = useState(false); // 챌린지 추가 모달 상태
 
   // 드롭다운 메뉴 토글
   const toggleMenu = () => {
@@ -20,9 +23,21 @@ const DropdownMenu: React.FC = () => {
     setIsInviteModalOpen(true); // 초대 모달 열기
   };
 
+  // 챌린지 추가 클릭 핸들러
+  const handleChallengeClick = () => {
+    setIsOpen(false); // 드롭다운 닫기
+    setIsChallengeModalOpen(true); // 챌린지 추가 모달 열기
+  };
+
   // 초대 완료 핸들러
   const handleInvite = (id: string) => {
     console.log('초대된 아이디:', id);
+    // API 호출 로직 추가 예정
+  };
+
+  // 챌린지 시작 핸들러
+  const handleStartChallenge = (challengeId: number) => {
+    console.log('선택된 챌린지 ID:', challengeId);
     // API 호출 로직 추가 예정
   };
 
@@ -37,7 +52,7 @@ const DropdownMenu: React.FC = () => {
       {isOpen && (
         <MenuList>
           <MenuItem onClick={handleInviteClick}>친구 초대</MenuItem>
-          <MenuItem>챌린지 추가</MenuItem>
+          <MenuItem onClick={handleChallengeClick}>챌린지 추가</MenuItem>
           <MenuItem $danger>그룹 삭제</MenuItem>
         </MenuList>
       )}
@@ -47,6 +62,13 @@ const DropdownMenu: React.FC = () => {
         isOpen={isInviteModalOpen}
         onClose={() => setIsInviteModalOpen(false)}
         onInvite={handleInvite}
+      />
+
+      {/* 챌린지 추가 모달 */}
+      <ChallengeAddModal
+        isOpen={isChallengeModalOpen}
+        onClose={() => setIsChallengeModalOpen(false)}
+        onStartChallenge={handleStartChallenge}
       />
     </Container>
   );

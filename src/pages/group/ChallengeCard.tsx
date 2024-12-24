@@ -41,7 +41,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
   }[badgeType];
 
   return (
-    <CardContainer gradientColors={gradientColors}>
+    <CardContainer $gradientColors={gradientColors}>
       <CheckIconBackground src={CheckIcon} alt="check-icon" />
       <Content>
         <Title>{title}</Title>
@@ -59,7 +59,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
 export default ChallengeCard;
 
 // 스타일 정의
-const CardContainer = styled.div<{ gradientColors: [string, string] }>`
+const CardContainer = styled.div<{ $gradientColors: [string, string] }>`
   width: 236px;
   height: 71px;
   border-radius: 15px;
@@ -68,7 +68,7 @@ const CardContainer = styled.div<{ gradientColors: [string, string] }>`
   overflow: hidden;
   background: linear-gradient(
     135deg,
-    ${({ gradientColors }) => `${gradientColors[0]}, ${gradientColors[1]}`}
+    ${({ $gradientColors }) => `${$gradientColors[0]}, ${$gradientColors[1]}`}
   );
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
 `;
@@ -95,6 +95,7 @@ const Title = styled.h3`
   font-weight: 700;
   line-height: 17px;
   color: #ffffff;
+  text-align: left;
 `;
 
 const Details = styled.div`

@@ -1,9 +1,31 @@
 import styled from 'styled-components';
 import BackButton from '../../components/BackButton';
+import ChallengeProgressCard from './ChallengeProgressCard';
 import DropdownMenu from './DropdownMenu';
 import MemberCard from './MemberCard';
 
 export default function Group() {
+  const members = [
+    {
+      id: 1,
+      name: '홍길동',
+      profileUrl: '/assets/images/profile1.jpg',
+      status: '완료',
+    },
+    {
+      id: 2,
+      name: '박길동',
+      profileUrl: '/assets/images/profile2.jpg',
+      status: '미완료',
+    },
+    {
+      id: 3,
+      name: '김길동',
+      profileUrl: '', // 프로필 없을 경우
+      status: '미완료',
+    },
+  ];
+
   return (
     <Container>
       <TopBar>
@@ -31,11 +53,18 @@ export default function Group() {
           name="김길동"
           score={75}
           lastChecked="2024.09.24"
-          profileImageUrl={null} // 프로필 사진이 없을 경우
+          profileImageUrl={null}
         />
       </MemberList>
 
-      {/* 드롭다운 메뉴 - 오른쪽 아래에 고정 */}
+      <ChallengeProgressCard
+        title="2주 1회 검사 챌린지"
+        duration="3달 (24.12.23 ~ 25.2.23)"
+        progress={0.65} // 65% 진행
+        members={members}
+        badgeType="gold"
+      />
+
       <DropdownWrapper>
         <DropdownMenu />
       </DropdownWrapper>
@@ -69,6 +98,7 @@ const MemberList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
+  margin-bottom: 30px;
 `;
 
 const DropdownWrapper = styled.div`
