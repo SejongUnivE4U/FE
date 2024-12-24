@@ -6,6 +6,8 @@ import HomeActiveIcon from '../../public/assets/icons/home-active-icon.svg';
 import HomeIcon from '../../public/assets/icons/home-icon.svg';
 import ReportActiveIcon from '../../public/assets/icons/report-active-icon.svg';
 import ReportIcon from '../../public/assets/icons/report-icon.svg';
+import TeamActiveIcon from '../../public/assets/icons/team-active-icon.svg';
+import TeamIcon from '../../public/assets/icons/team-icon.svg';
 import UserActiveIcon from '../../public/assets/icons/user-active-icon.svg';
 import UserIcon from '../../public/assets/icons/user-icon.svg';
 
@@ -52,6 +54,16 @@ export default function NavBar() {
           alt="구강 리포트 아이콘"
         />
         구강 리포트
+      </NavItem>
+      <NavItem
+        onClick={() => handleNavigation('/groups')}
+        $isActive={location.pathname === '/groups'}
+      >
+        <NavIcon
+          src={location.pathname === '/groups' ? TeamActiveIcon : TeamIcon}
+          alt="그룹 아이콘"
+        />
+        그룹
       </NavItem>
       <NavItem
         onClick={() => handleNavigation('/account-setting')}
