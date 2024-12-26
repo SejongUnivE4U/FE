@@ -62,7 +62,7 @@ const ChallengeProgressCard: React.FC<ChallengeProgressCardProps> = ({
 
       {/* 멤버 상태 */}
       <MemberSection>
-        <WeekLabel>6-8주차</WeekLabel>
+        <WeekLabel>7-8주차</WeekLabel>
         <MemberList>
           {members.map((member) => (
             <MemberItem key={member.id}>

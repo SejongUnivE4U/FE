@@ -35,7 +35,7 @@ const challenges: Challenge[] = [
   },
   {
     id: 3,
-    title: '3주 1회 검사 챌린지',
+    title: '4주 1회 검사 챌린지',
     durationInMonths: 3,
     gradientColors: ['#FFB8E0', '#C2EA80'],
     badgeType: 'bronze',
