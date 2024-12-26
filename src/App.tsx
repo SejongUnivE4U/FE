@@ -9,6 +9,9 @@ import UpperPhotoPreview from './pages/detail-oral-check/photo-preview/UpperPhot
 import FrontPhoto from './pages/detail-oral-check/photo/FrontPhoto';
 import LowerPhoto from './pages/detail-oral-check/photo/LowerPhoto';
 import UpperPhoto from './pages/detail-oral-check/photo/UpperPhoto';
+import Group from './pages/group/Group';
+import Groups from './pages/groups/Groups';
+import GroupAdd from './pages/groups/add/GroupAdd';
 import Home from './pages/home/Home';
 import Landing from './pages/landing/Landing';
 import Login from './pages/login/Login';
@@ -108,6 +111,11 @@ function App() {
 
               <Route path="/report/:reportId" element={<Report />} />
               <Route path="/report-list" element={<ReportList />} />
+
+              <Route path="/groups" element={<Groups />} />
+              <Route path="/groups/add" element={<GroupAdd />} />
+              {/* <Route path="/group" element={<Group />} /> */}
+              <Route path="/group/:groupId" element={<Group />} />
             </Route>
           </Routes>
         </Router>
